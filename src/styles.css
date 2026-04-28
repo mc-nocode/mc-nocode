@@ -198,6 +198,10 @@
   .soft-button {
     box-shadow: var(--shadow-soft);
   }
+
+  .quiet-card {
+    box-shadow: 0 12px 34px -30px oklch(0.27 0.018 73.2 / 34%);
+  }
 }
 
 @keyframes mori-breathe {
