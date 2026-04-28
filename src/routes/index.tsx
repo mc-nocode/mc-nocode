@@ -19,7 +19,9 @@ function Index() {
         <header className="slow-rise flex items-center justify-between pt-2">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
-            <h1 className="font-reflective mt-2 text-3xl leading-tight text-foreground">What remains?</h1>
+            <h1 className="font-reflective mt-2 text-3xl leading-tight text-foreground">
+              What remains?
+            </h1>
           </div>
           <div className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface/70 text-moss shadow-soft backdrop-blur">
             <Sparkle className="h-4 w-4" aria-hidden="true" />
@@ -38,7 +40,9 @@ function Index() {
               />
             </div>
             <div className="px-3 pb-2 pt-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">4 years ago · morning</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                4 years ago · morning
+              </p>
               <h2 className="font-reflective mt-3 text-4xl leading-[1.08] text-foreground">
                 Why did this moment matter?
               </h2>
@@ -57,7 +61,10 @@ function Index() {
           </section>
         </div>
 
-        <nav className="slow-rise grid grid-cols-3 gap-3 pb-2 [animation-delay:260ms]" aria-label="Memory choices">
+        <nav
+          className="slow-rise grid grid-cols-3 gap-3 pb-2 [animation-delay:260ms]"
+          aria-label="Memory choices"
+        >
           {actions.map((action) => {
             const Icon = action.icon;
             return (
@@ -66,9 +73,14 @@ function Index() {
                 className="soft-button group flex min-h-28 flex-col items-center justify-center rounded-[1.35rem] border border-border bg-surface/76 px-2 py-4 text-center transition duration-500 hover:-translate-y-1 hover:bg-accent/60 focus:outline-none focus:ring-4 focus:ring-ring/20"
                 type="button"
               >
-                <Icon className="mb-3 h-5 w-5 text-moss transition duration-500 group-hover:scale-110" aria-hidden="true" />
+                <Icon
+                  className="mb-3 h-5 w-5 text-moss transition duration-500 group-hover:scale-110"
+                  aria-hidden="true"
+                />
                 <span className="text-sm font-medium text-foreground">{action.label}</span>
-                <span className="mt-1 text-[11px] leading-snug text-muted-foreground">{action.detail}</span>
+                <span className="mt-1 text-[11px] leading-snug text-muted-foreground">
+                  {action.detail}
+                </span>
               </button>
             );
           })}

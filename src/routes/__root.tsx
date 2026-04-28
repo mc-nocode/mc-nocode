@@ -30,10 +30,18 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Mori — Photo Reflection App" },
-      { name: "description", content: "Mori is a calm mobile photo reflection app for revisiting memories, writing thoughtful captions, and choosing what truly matters." },
+      {
+        name: "description",
+        content:
+          "Mori is a calm mobile photo reflection app for revisiting memories, writing thoughtful captions, and choosing what truly matters.",
+      },
       { name: "author", content: "Mori" },
       { property: "og:title", content: "Mori — Photo Reflection App" },
-      { property: "og:description", content: "A quiet mobile flow for revisiting photos and deciding what to share, keep privately, or archive." },
+      {
+        property: "og:description",
+        content:
+          "A quiet mobile flow for revisiting photos and deciding what to share, keep privately, or archive.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
