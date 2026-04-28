@@ -157,8 +157,64 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+}
+
+@layer utilities {
+  .font-reflective {
+    font-family: var(--font-serif);
+  }
+
+  .mori-grain {
+    background-image:
+      radial-gradient(circle at 20% 10%, oklch(0.86 0.034 116.5 / 38%), transparent 24rem),
+      radial-gradient(circle at 78% 82%, oklch(0.74 0.039 42.1 / 24%), transparent 22rem),
+      linear-gradient(135deg, var(--color-background), var(--color-surface-quiet));
+  }
+
+  .breathing-photo {
+    animation: mori-breathe 9s ease-in-out infinite;
+  }
+
+  .slow-rise {
+    animation: mori-rise 900ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  }
+
+  .soft-button {
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+@keyframes mori-breathe {
+  0%, 100% { transform: scale(1); filter: saturate(0.9) contrast(0.96); }
+  50% { transform: scale(1.018); filter: saturate(0.82) contrast(0.94); }
+}
+
+@keyframes mori-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
