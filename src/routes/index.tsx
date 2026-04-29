@@ -5,6 +5,7 @@ import {
   Clock3,
   FileImage,
   FolderOpen,
+  Lightbulb,
   Lock,
   PenLine,
   Pin,
@@ -18,21 +19,27 @@ export const Route = createFileRoute("/")({
 });
 
 const actions = [
-  { label: "Keep", detail: "Stay close", icon: Lock },
-  { label: "Archive", detail: "Let it rest", icon: Archive },
-  { label: "Reflect", detail: "Add context", icon: PenLine },
+  { label: "Keep", detail: "Use soon", icon: Lock },
+  { label: "Archive", detail: "Save later", icon: Archive },
+  { label: "Reflect", detail: "Find angle", icon: PenLine },
 ];
 
 const recentFiles = [
-  { title: "Kitchen light", meta: "Photo · added today", status: "Private", icon: FileImage },
-  { title: "Saturday walk", meta: "7 photos · yesterday", status: "Folder", icon: FolderOpen },
-  { title: "Small goodbye", meta: "Photo · last week", status: "Archived", icon: FileImage },
+  { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
+  { title: "April content batch", meta: "7 assets · yesterday", status: "Folder", icon: FolderOpen },
+  { title: "Unused hook idea", meta: "Photo · last week", status: "Archived", icon: FileImage },
 ];
 
 const drafts = [
-  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
-  { title: "Window notes", time: "Yesterday", image: moriPhoto },
-  { title: "Before archive", time: "2 days ago", image: moriPhoto },
+  { title: "Morning reel", time: "12 min ago", image: moriPhoto },
+  { title: "Quiet desk", time: "Yesterday", image: moriPhoto },
+  { title: "Soft launch", time: "2 days ago", image: moriPhoto },
+];
+
+const contentIdeas = [
+  "Turn this photo into a 20-second behind-the-scenes reel.",
+  "Write a carousel about building a slower creative routine.",
+  "Post a short caption on why simple setups still feel personal.",
 ];
 
 function Index() {
