@@ -5,6 +5,7 @@ import {
   Clock3,
   FileImage,
   FolderOpen,
+  Lightbulb,
   Lock,
   PenLine,
   Pin,
@@ -18,21 +19,32 @@ export const Route = createFileRoute("/")({
 });
 
 const actions = [
-  { label: "Keep", detail: "Stay close", icon: Lock },
-  { label: "Archive", detail: "Let it rest", icon: Archive },
-  { label: "Reflect", detail: "Add context", icon: PenLine },
+  { label: "Keep", detail: "Use soon", icon: Lock },
+  { label: "Archive", detail: "Save later", icon: Archive },
+  { label: "Reflect", detail: "Find angle", icon: PenLine },
 ];
 
 const recentFiles = [
-  { title: "Kitchen light", meta: "Photo · added today", status: "Private", icon: FileImage },
-  { title: "Saturday walk", meta: "7 photos · yesterday", status: "Folder", icon: FolderOpen },
-  { title: "Small goodbye", meta: "Photo · last week", status: "Archived", icon: FileImage },
+  { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
+  {
+    title: "April content batch",
+    meta: "7 assets · yesterday",
+    status: "Folder",
+    icon: FolderOpen,
+  },
+  { title: "Unused hook idea", meta: "Photo · last week", status: "Archived", icon: FileImage },
 ];
 
 const drafts = [
-  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
-  { title: "Window notes", time: "Yesterday", image: moriPhoto },
-  { title: "Before archive", time: "2 days ago", image: moriPhoto },
+  { title: "Morning reel", time: "12 min ago", image: moriPhoto },
+  { title: "Quiet desk", time: "Yesterday", image: moriPhoto },
+  { title: "Soft launch", time: "2 days ago", image: moriPhoto },
+];
+
+const contentIdeas = [
+  "Turn this photo into a 20-second behind-the-scenes reel.",
+  "Write a carousel about building a slower creative routine.",
+  "Post a short caption on why simple setups still feel personal.",
 ];
 
 function Index() {
@@ -49,7 +61,7 @@ function Index() {
           </button>
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
-            <h1 className="mt-1 text-base font-semibold text-foreground">Quiet Cloud</h1>
+            <h1 className="mt-1 text-base font-semibold text-foreground">Creator Space</h1>
           </div>
           <button
             className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
@@ -116,13 +128,13 @@ function Index() {
               </div>
               <div className="px-1 pb-1 pt-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Saved privately · pinned to home
+                  Saved privately · ready to shape
                 </p>
                 <h3 className="font-reflective mt-2 text-3xl leading-tight text-foreground">
-                  Kitchen light
+                  Morning reel cover
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  A quiet photo kept close for quick access and gentle reflection.
+                  A calm visual starting point for a thoughtful post, reel, or carousel.
                 </p>
                 <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Pinned photo choices">
                   {actions.map((action) => {
@@ -189,16 +201,29 @@ function Index() {
 
           <section className="slow-rise rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft [animation-delay:290ms]">
             <div className="flex items-center justify-between gap-4">
-              <label htmlFor="pinned-caption" className="block text-sm font-medium text-ink-soft">
-                Pinned caption
-              </label>
-              <ChevronRight className="h-4 w-4 text-primary" aria-hidden="true" />
+              <div className="flex items-center gap-2">
+                <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
+                <p className="text-sm font-medium text-ink-soft">Content ideas</p>
+              </div>
+              <button className="text-xs font-medium text-primary" type="button">
+                Add idea
+              </button>
             </div>
-            <textarea
-              id="pinned-caption"
-              defaultValue="The room was quiet, and this is the photo I want close by."
-              className="mt-3 min-h-24 w-full resize-none rounded-[1.1rem] border border-input bg-background px-4 py-3 font-reflective text-xl leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-            />
+            <div className="mt-3 space-y-2.5">
+              {contentIdeas.map((idea) => (
+                <button
+                  key={idea}
+                  className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  type="button"
+                >
+                  <span className="text-sm leading-relaxed text-foreground">{idea}</span>
+                  <ChevronRight
+                    className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                    aria-hidden="true"
+                  />
+                </button>
+              ))}
+            </div>
           </section>
         </div>
 
@@ -206,7 +231,7 @@ function Index() {
           className="slow-rise grid grid-cols-3 gap-2 border-t border-border bg-card px-5 py-4 [animation-delay:360ms]"
           aria-label="Mori navigation"
         >
-          {["Store", "Revisit", "Reflect"].map((item) => (
+          {["Store", "Draft", "Ideas"].map((item) => (
             <button
               key={item}
               className="rounded-2xl px-3 py-2 text-xs font-medium text-muted-foreground transition duration-500 hover:bg-secondary hover:text-primary focus:outline-none focus:ring-4 focus:ring-ring/15"
