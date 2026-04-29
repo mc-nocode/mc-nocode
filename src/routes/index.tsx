@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
@@ -8,7 +9,6 @@ import {
   Lightbulb,
   Lock,
   PenLine,
-  Pin,
   Plus,
   Search,
 } from "lucide-react";
@@ -27,8 +27,8 @@ const actions = [
 const recentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
   {
-    title: "April content batch",
-    meta: "7 assets · yesterday",
+    title: "Saturday walk",
+    meta: "7 photos · yesterday",
     status: "Folder",
     icon: FolderOpen,
   },
@@ -36,15 +36,15 @@ const recentFiles = [
 ];
 
 const drafts = [
-  { title: "Morning reel", time: "12 min ago", image: moriPhoto },
-  { title: "Quiet desk", time: "Yesterday", image: moriPhoto },
-  { title: "Soft launch", time: "2 days ago", image: moriPhoto },
+  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
+  { title: "Window notes", time: "Yesterday", image: moriPhoto },
+  { title: "Before archive", time: "2 days ago", image: moriPhoto },
 ];
 
-const contentIdeas = [
-  "Turn this photo into a 20-second behind-the-scenes reel.",
-  "Write a carousel about building a slower creative routine.",
-  "Post a short caption on why simple setups still feel personal.",
+const initialContentIdeas = [
+  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel.", status: "Idea" },
+  { id: 2, text: "Write a carousel about building a slower creative routine.", status: "Planned" },
+  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "Done" },
 ];
 
 function Index() {
