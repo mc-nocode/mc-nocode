@@ -196,16 +196,26 @@ function Index() {
 
           <section className="slow-rise rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft [animation-delay:290ms]">
             <div className="flex items-center justify-between gap-4">
-              <label htmlFor="pinned-caption" className="block text-sm font-medium text-ink-soft">
-                Pinned caption
-              </label>
-              <ChevronRight className="h-4 w-4 text-primary" aria-hidden="true" />
+              <div className="flex items-center gap-2">
+                <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
+                <p className="text-sm font-medium text-ink-soft">Content ideas</p>
+              </div>
+              <button className="text-xs font-medium text-primary" type="button">
+                Add idea
+              </button>
             </div>
-            <textarea
-              id="pinned-caption"
-              defaultValue="The room was quiet, and this is the photo I want close by."
-              className="mt-3 min-h-24 w-full resize-none rounded-[1.1rem] border border-input bg-background px-4 py-3 font-reflective text-xl leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-            />
+            <div className="mt-3 space-y-2.5">
+              {contentIdeas.map((idea) => (
+                <button
+                  key={idea}
+                  className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  type="button"
+                >
+                  <span className="text-sm leading-relaxed text-foreground">{idea}</span>
+                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                </button>
+              ))}
+            </div>
           </section>
         </div>
 
@@ -213,7 +223,7 @@ function Index() {
           className="slow-rise grid grid-cols-3 gap-2 border-t border-border bg-card px-5 py-4 [animation-delay:360ms]"
           aria-label="Mori navigation"
         >
-          {["Store", "Revisit", "Reflect"].map((item) => (
+          {["Store", "Draft", "Ideas"].map((item) => (
             <button
               key={item}
               className="rounded-2xl px-3 py-2 text-xs font-medium text-muted-foreground transition duration-500 hover:bg-secondary hover:text-primary focus:outline-none focus:ring-4 focus:ring-ring/15"
