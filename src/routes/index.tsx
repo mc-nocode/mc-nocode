@@ -56,7 +56,7 @@ function Index() {
           </button>
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
-            <h1 className="mt-1 text-base font-semibold text-foreground">Quiet Cloud</h1>
+            <h1 className="mt-1 text-base font-semibold text-foreground">Creator Space</h1>
           </div>
           <button
             className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
@@ -123,13 +123,13 @@ function Index() {
               </div>
               <div className="px-1 pb-1 pt-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Saved privately · pinned to home
+                  Saved privately · ready to shape
                 </p>
                 <h3 className="font-reflective mt-2 text-3xl leading-tight text-foreground">
-                  Kitchen light
+                  Morning reel cover
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  A quiet photo kept close for quick access and gentle reflection.
+                  A calm visual starting point for a thoughtful post, reel, or carousel.
                 </p>
                 <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Pinned photo choices">
                   {actions.map((action) => {
