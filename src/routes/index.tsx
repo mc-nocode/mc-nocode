@@ -26,7 +26,12 @@ const actions = [
 
 const recentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
-  { title: "April content batch", meta: "7 assets · yesterday", status: "Folder", icon: FolderOpen },
+  {
+    title: "April content batch",
+    meta: "7 assets · yesterday",
+    status: "Folder",
+    icon: FolderOpen,
+  },
   { title: "Unused hook idea", meta: "Photo · last week", status: "Archived", icon: FileImage },
 ];
 
@@ -212,7 +217,10 @@ function Index() {
                   type="button"
                 >
                   <span className="text-sm leading-relaxed text-foreground">{idea}</span>
-                  <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  <ChevronRight
+                    className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                    aria-hidden="true"
+                  />
                 </button>
               ))}
             </div>
