@@ -78,9 +78,7 @@ function Index() {
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-primary-foreground/18">
               <div className="h-full w-[58%] rounded-full bg-primary-foreground" />
             </div>
-            <p className="mt-3 text-xs opacity-80">
-              18.4 GB kept intentionally · 3 photos pinned
-            </p>
+            <p className="mt-3 text-xs opacity-80">18.4 GB kept intentionally · 3 photos pinned</p>
           </section>
 
           <section
