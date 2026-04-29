@@ -8,9 +8,9 @@ import {
   Lock,
   MoreHorizontal,
   PenLine,
+  Pin,
   Plus,
   Search,
-  Sparkle,
 } from "lucide-react";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
 
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
 const actions = [
   { label: "Keep", detail: "Stay close", icon: Lock },
   { label: "Archive", detail: "Let it rest", icon: Archive },
-  { label: "Reflect", detail: "Add meaning", icon: PenLine },
+  { label: "Reflect", detail: "Add context", icon: PenLine },
 ];
 
 const recentFiles = [
@@ -49,7 +49,7 @@ function Index() {
           <button
             className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
             type="button"
-            aria-label="Store a new memory"
+            aria-label="Store a new file"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -79,17 +79,17 @@ function Index() {
               <div className="h-full w-[58%] rounded-full bg-primary-foreground" />
             </div>
             <p className="mt-3 text-xs opacity-80">
-              18.4 GB kept intentionally · 13 memories reflected
+              18.4 GB kept intentionally · 3 photos pinned
             </p>
           </section>
 
           <section
             className="slow-rise space-y-4 [animation-delay:150ms]"
-            aria-label="Resurfaced memory"
+            aria-label="Pinned photo"
           >
             <div className="flex items-center justify-between px-1">
-              <p className="text-sm font-medium text-ink-soft">Resurfaced memory</p>
-              <Sparkle className="h-4 w-4 text-primary" aria-hidden="true" />
+              <p className="text-sm font-medium text-ink-soft">Pinned photo</p>
+              <Pin className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
               <div className="overflow-hidden rounded-[1.15rem] bg-linen">
@@ -103,12 +103,15 @@ function Index() {
               </div>
               <div className="px-1 pb-1 pt-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  4 years ago · saved privately
+                  Saved privately · pinned to home
                 </p>
                 <h3 className="font-reflective mt-2 text-3xl leading-tight text-foreground">
-                  Why did this moment matter?
+                  Kitchen light
                 </h3>
-                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Memory choices">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  A quiet photo kept close for quick access and gentle reflection.
+                </p>
+                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Pinned photo choices">
                   {actions.map((action) => {
                     const Icon = action.icon;
                     return (
@@ -173,14 +176,14 @@ function Index() {
 
           <section className="slow-rise rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft [animation-delay:290ms]">
             <div className="flex items-center justify-between gap-4">
-              <label htmlFor="reflection" className="block text-sm font-medium text-ink-soft">
-                Reflection caption
+              <label htmlFor="pinned-caption" className="block text-sm font-medium text-ink-soft">
+                Pinned caption
               </label>
               <ChevronRight className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <textarea
-              id="reflection"
-              defaultValue="The room was quiet, but I remember feeling completely held by the morning."
+              id="pinned-caption"
+              defaultValue="The room was quiet, and this is the photo I want close by."
               className="mt-3 min-h-24 w-full resize-none rounded-[1.1rem] border border-input bg-background px-4 py-3 font-reflective text-xl leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
             />
           </section>
