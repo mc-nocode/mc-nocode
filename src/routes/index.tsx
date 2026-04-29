@@ -47,7 +47,48 @@ const initialContentIdeas = [
   { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "Done" },
 ];
 
+type ContentIdea = (typeof initialContentIdeas)[number];
+
+const buildPostDraft = (idea: string) => ({
+  caption: `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
+  hashtags: "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
+});
+
 function Index() {
+  const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
+  const [newIdea, setNewIdea] = useState("");
+  const [selectedIdeaId, setSelectedIdeaId] = useState(initialContentIdeas[0].id);
+  const selectedIdea = ideas.find((idea) => idea.id === selectedIdeaId) ?? ideas[0];
+  const generatedDraft = useMemo(
+    () => buildPostDraft(selectedIdea?.text ?? "Share one quiet creative detail from this draft."),
+    [selectedIdea?.text],
+  );
+
+  const addIdea = () => {
+    const text = newIdea.trim();
+
+    if (!text) {
+      return;
+    }
+
+    const idea = { id: Date.now(), text, status: "Idea" };
+    setIdeas((currentIdeas) => [idea, ...currentIdeas]);
+    setSelectedIdeaId(idea.id);
+    setNewIdea("");
+  };
+
+  const updateSelectedIdea = (text: string) => {
+    setIdeas((currentIdeas) =>
+      currentIdeas.map((idea) => (idea.id === selectedIdeaId ? { ...idea, text } : idea)),
+    );
+  };
+
+  const updateSelectedStatus = (status: ContentIdea["status"]) => {
+    setIdeas((currentIdeas) =>
+      currentIdeas.map((idea) => (idea.id === selectedIdeaId ? { ...idea, status } : idea)),
+    );
+  };
+
   return (
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
       <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.15rem] border border-border bg-background shadow-phone">
