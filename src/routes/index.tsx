@@ -2,11 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
   ChevronRight,
-  Cloud,
+  Clock3,
   FileImage,
   FolderOpen,
   Lock,
-  MoreHorizontal,
   PenLine,
   Pin,
   Plus,
@@ -28,6 +27,12 @@ const recentFiles = [
   { title: "Kitchen light", meta: "Photo · added today", status: "Private", icon: FileImage },
   { title: "Saturday walk", meta: "7 photos · yesterday", status: "Folder", icon: FolderOpen },
   { title: "Small goodbye", meta: "Photo · last week", status: "Archived", icon: FileImage },
+];
+
+const drafts = [
+  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
+  { title: "Window notes", time: "Yesterday", image: moriPhoto },
+  { title: "Before archive", time: "2 days ago", image: moriPhoto },
 ];
 
 function Index() {
@@ -56,29 +61,39 @@ function Index() {
         </header>
 
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
-          <section className="slow-rise rounded-[1.7rem] bg-primary p-4 text-primary-foreground shadow-photo [animation-delay:80ms]">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15">
-                  <Cloud className="h-5 w-5" aria-hidden="true" />
-                </div>
-                <p className="text-xs uppercase tracking-[0.2em] opacity-75">Mori Cloud</p>
-                <h2 className="mt-2 text-2xl font-semibold leading-tight">
-                  A softer place for what matters.
-                </h2>
-              </div>
-              <button
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-foreground/12 transition duration-500 hover:bg-primary-foreground/20 focus:outline-none focus:ring-4 focus:ring-primary-foreground/20"
-                type="button"
-                aria-label="More storage options"
-              >
-                <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+          <section className="slow-rise space-y-3 [animation-delay:80ms]" aria-label="Drafts">
+            <div className="flex items-center justify-between px-1">
+              <p className="text-sm font-medium text-ink-soft">Drafts</p>
+              <button className="text-xs font-medium text-primary" type="button">
+                View all
               </button>
             </div>
-            <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-primary-foreground/18">
-              <div className="h-full w-[58%] rounded-full bg-primary-foreground" />
+            <div className="grid grid-cols-3 gap-2.5">
+              {drafts.map((draft) => (
+                <button
+                  key={draft.title}
+                  className="quiet-card overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  type="button"
+                >
+                  <img
+                    src={draft.image}
+                    alt={`${draft.title} draft`}
+                    width={320}
+                    height={240}
+                    className="aspect-square w-full object-cover"
+                  />
+                  <span className="block p-2.5">
+                    <span className="block truncate text-xs font-semibold text-foreground">
+                      {draft.title}
+                    </span>
+                    <span className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
+                      <Clock3 className="h-3 w-3" aria-hidden="true" />
+                      <span className="truncate">{draft.time}</span>
+                    </span>
+                  </span>
+                </button>
+              ))}
             </div>
-            <p className="mt-3 text-xs opacity-80">18.4 GB kept intentionally · 3 photos pinned</p>
           </section>
 
           <section
