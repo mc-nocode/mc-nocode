@@ -151,11 +151,11 @@ function Index() {
 
           <section
             className="slow-rise space-y-4 [animation-delay:150ms]"
-            aria-label="Pinned photo"
+            aria-label="Featured draft"
           >
             <div className="flex items-center justify-between px-1">
-              <p className="text-sm font-medium text-ink-soft">Pinned photo</p>
-              <Pin className="h-4 w-4 text-primary" aria-hidden="true" />
+              <p className="text-sm font-medium text-ink-soft">Featured draft</p>
+              <PenLine className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
               <div className="overflow-hidden rounded-[1.15rem] bg-linen">
@@ -177,7 +177,7 @@ function Index() {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   A calm visual starting point for a thoughtful post, reel, or carousel.
                 </p>
-                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Pinned photo choices">
+                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Featured draft choices">
                   {actions.map((action) => {
                     const Icon = action.icon;
                     return (
