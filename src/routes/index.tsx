@@ -278,8 +278,12 @@ function Index() {
                   onClick={() => setSelectedIdeaId(idea.id)}
                 >
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm leading-relaxed text-foreground">{idea.text}</span>
-                    <span className="mt-1 block text-[11px] text-muted-foreground">{idea.status}</span>
+                    <span className="block text-sm leading-relaxed text-foreground">
+                      {idea.text}
+                    </span>
+                    <span className="mt-1 block text-[11px] text-muted-foreground">
+                      {idea.status}
+                    </span>
                   </span>
                   <ChevronRight
                     className="mt-0.5 h-4 w-4 shrink-0 text-primary"
@@ -314,7 +318,9 @@ function Index() {
                 />
                 <div className="mt-3 rounded-[1rem] bg-secondary p-3">
                   <p className="text-xs font-semibold text-primary">Generated post draft</p>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground">{generatedDraft.caption}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                    {generatedDraft.caption}
+                  </p>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                     {generatedDraft.hashtags}
                   </p>
