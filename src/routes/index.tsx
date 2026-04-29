@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
@@ -8,7 +9,6 @@ import {
   Lightbulb,
   Lock,
   PenLine,
-  Pin,
   Plus,
   Search,
 } from "lucide-react";
@@ -27,8 +27,8 @@ const actions = [
 const recentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
   {
-    title: "April content batch",
-    meta: "7 assets · yesterday",
+    title: "Saturday walk",
+    meta: "7 photos · yesterday",
     status: "Folder",
     icon: FolderOpen,
   },
@@ -36,18 +36,59 @@ const recentFiles = [
 ];
 
 const drafts = [
-  { title: "Morning reel", time: "12 min ago", image: moriPhoto },
-  { title: "Quiet desk", time: "Yesterday", image: moriPhoto },
-  { title: "Soft launch", time: "2 days ago", image: moriPhoto },
+  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
+  { title: "Window notes", time: "Yesterday", image: moriPhoto },
+  { title: "Before archive", time: "2 days ago", image: moriPhoto },
 ];
 
-const contentIdeas = [
-  "Turn this photo into a 20-second behind-the-scenes reel.",
-  "Write a carousel about building a slower creative routine.",
-  "Post a short caption on why simple setups still feel personal.",
+const initialContentIdeas = [
+  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel.", status: "Idea" },
+  { id: 2, text: "Write a carousel about building a slower creative routine.", status: "Planned" },
+  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "Done" },
 ];
+
+type ContentIdea = (typeof initialContentIdeas)[number];
+
+const buildPostDraft = (idea: string) => ({
+  caption: `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
+  hashtags: "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
+});
 
 function Index() {
+  const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
+  const [newIdea, setNewIdea] = useState("");
+  const [selectedIdeaId, setSelectedIdeaId] = useState(initialContentIdeas[0].id);
+  const selectedIdea = ideas.find((idea) => idea.id === selectedIdeaId) ?? ideas[0];
+  const generatedDraft = useMemo(
+    () => buildPostDraft(selectedIdea?.text ?? "Share one quiet creative detail from this draft."),
+    [selectedIdea?.text],
+  );
+
+  const addIdea = () => {
+    const text = newIdea.trim();
+
+    if (!text) {
+      return;
+    }
+
+    const idea = { id: Date.now(), text, status: "Idea" };
+    setIdeas((currentIdeas) => [idea, ...currentIdeas]);
+    setSelectedIdeaId(idea.id);
+    setNewIdea("");
+  };
+
+  const updateSelectedIdea = (text: string) => {
+    setIdeas((currentIdeas) =>
+      currentIdeas.map((idea) => (idea.id === selectedIdeaId ? { ...idea, text } : idea)),
+    );
+  };
+
+  const updateSelectedStatus = (status: ContentIdea["status"]) => {
+    setIdeas((currentIdeas) =>
+      currentIdeas.map((idea) => (idea.id === selectedIdeaId ? { ...idea, status } : idea)),
+    );
+  };
+
   return (
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
       <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.15rem] border border-border bg-background shadow-phone">
@@ -110,11 +151,11 @@ function Index() {
 
           <section
             className="slow-rise space-y-4 [animation-delay:150ms]"
-            aria-label="Pinned photo"
+            aria-label="Featured draft"
           >
             <div className="flex items-center justify-between px-1">
-              <p className="text-sm font-medium text-ink-soft">Pinned photo</p>
-              <Pin className="h-4 w-4 text-primary" aria-hidden="true" />
+              <p className="text-sm font-medium text-ink-soft">Featured draft</p>
+              <PenLine className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
               <div className="overflow-hidden rounded-[1.15rem] bg-linen">
@@ -136,7 +177,7 @@ function Index() {
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   A calm visual starting point for a thoughtful post, reel, or carousel.
                 </p>
-                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Pinned photo choices">
+                <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Featured draft choices">
                   {actions.map((action) => {
                     const Icon = action.icon;
                     return (
@@ -199,24 +240,51 @@ function Index() {
             </div>
           </section>
 
-          <section className="slow-rise rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft [animation-delay:290ms]">
+          <section className="slow-rise space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft [animation-delay:290ms]">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
                 <p className="text-sm font-medium text-ink-soft">Content ideas</p>
               </div>
-              <button className="text-xs font-medium text-primary" type="button">
-                Add idea
+              <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
+            </div>
+            <div className="flex gap-2">
+              <input
+                value={newIdea}
+                onChange={(event) => setNewIdea(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    addIdea();
+                  }
+                }}
+                className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                placeholder="Add a content idea"
+                type="text"
+              />
+              <button
+                className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+                type="button"
+                onClick={addIdea}
+              >
+                Add
               </button>
             </div>
-            <div className="mt-3 space-y-2.5">
-              {contentIdeas.map((idea) => (
+            <div className="space-y-2.5">
+              {ideas.map((idea) => (
                 <button
-                  key={idea}
+                  key={idea.id}
                   className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                   type="button"
+                  onClick={() => setSelectedIdeaId(idea.id)}
                 >
-                  <span className="text-sm leading-relaxed text-foreground">{idea}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm leading-relaxed text-foreground">
+                      {idea.text}
+                    </span>
+                    <span className="mt-1 block text-[11px] text-muted-foreground">
+                      {idea.status}
+                    </span>
+                  </span>
                   <ChevronRight
                     className="mt-0.5 h-4 w-4 shrink-0 text-primary"
                     aria-hidden="true"
@@ -224,6 +292,41 @@ function Index() {
                 </button>
               ))}
             </div>
+            {selectedIdea && (
+              <article className="rounded-[1.15rem] border border-border bg-card p-3">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Idea detail
+                  </p>
+                  <div className="flex gap-1.5">
+                    {["Planned", "Done"].map((status) => (
+                      <button
+                        key={status}
+                        className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground transition hover:bg-accent"
+                        type="button"
+                        onClick={() => updateSelectedStatus(status)}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={selectedIdea.text}
+                  onChange={(event) => updateSelectedIdea(event.target.value)}
+                  className="mt-3 min-h-20 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+                <div className="mt-3 rounded-[1rem] bg-secondary p-3">
+                  <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                    {generatedDraft.caption}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {generatedDraft.hashtags}
+                  </p>
+                </div>
+              </article>
+            )}
           </section>
         </div>
 
