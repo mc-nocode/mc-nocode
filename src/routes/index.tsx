@@ -63,7 +63,9 @@ function Index() {
                   <Cloud className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <p className="text-xs uppercase tracking-[0.2em] opacity-75">Mori Cloud</p>
-                <h2 className="mt-2 text-2xl font-semibold leading-tight">A softer place for what matters.</h2>
+                <h2 className="mt-2 text-2xl font-semibold leading-tight">
+                  A softer place for what matters.
+                </h2>
               </div>
               <button
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-foreground/12 transition duration-500 hover:bg-primary-foreground/20 focus:outline-none focus:ring-4 focus:ring-primary-foreground/20"
@@ -76,23 +78,28 @@ function Index() {
             <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-primary-foreground/18">
               <div className="h-full w-[58%] rounded-full bg-primary-foreground" />
             </div>
-            <p className="mt-3 text-xs opacity-80">18.4 GB kept intentionally · 13 memories reflected</p>
+            <p className="mt-3 text-xs opacity-80">
+              18.4 GB kept intentionally · 13 memories reflected
+            </p>
           </section>
 
-          <section className="slow-rise space-y-4 [animation-delay:150ms]" aria-label="Resurfaced memory">
+          <section
+            className="slow-rise space-y-4 [animation-delay:150ms]"
+            aria-label="Resurfaced memory"
+          >
             <div className="flex items-center justify-between px-1">
               <p className="text-sm font-medium text-ink-soft">Resurfaced memory</p>
               <Sparkle className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
             <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
               <div className="overflow-hidden rounded-[1.15rem] bg-linen">
-              <img
-                src={moriPhoto}
-                alt="A quiet sunlit table with a cup, linen napkin, and single flower by a window"
-                width={1024}
-                height={1280}
-                className="breathing-photo aspect-[16/10] w-full object-cover"
-              />
+                <img
+                  src={moriPhoto}
+                  alt="A quiet sunlit table with a cup, linen napkin, and single flower by a window"
+                  width={1024}
+                  height={1280}
+                  className="breathing-photo aspect-[16/10] w-full object-cover"
+                />
               </div>
               <div className="px-1 pb-1 pt-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -111,7 +118,9 @@ function Index() {
                         type="button"
                       >
                         <Icon className="mb-2 h-4 w-4 text-primary" aria-hidden="true" />
-                        <span className="text-xs font-semibold text-foreground">{action.label}</span>
+                        <span className="text-xs font-semibold text-foreground">
+                          {action.label}
+                        </span>
                         <span className="mt-0.5 text-[10px] leading-snug text-muted-foreground">
                           {action.detail}
                         </span>
@@ -123,7 +132,10 @@ function Index() {
             </article>
           </section>
 
-          <section className="slow-rise space-y-3 [animation-delay:220ms]" aria-label="Recent files">
+          <section
+            className="slow-rise space-y-3 [animation-delay:220ms]"
+            aria-label="Recent files"
+          >
             <div className="flex items-center justify-between px-1">
               <p className="text-sm font-medium text-ink-soft">Recent files</p>
               <button className="text-xs font-medium text-primary" type="button">
@@ -143,8 +155,12 @@ function Index() {
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-foreground">{file.title}</span>
-                      <span className="mt-1 block truncate text-xs text-muted-foreground">{file.meta}</span>
+                      <span className="block truncate text-sm font-medium text-foreground">
+                        {file.title}
+                      </span>
+                      <span className="mt-1 block truncate text-xs text-muted-foreground">
+                        {file.meta}
+                      </span>
                     </span>
                     <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] text-accent-foreground">
                       {file.status}
@@ -170,7 +186,10 @@ function Index() {
           </section>
         </div>
 
-        <nav className="slow-rise grid grid-cols-3 gap-2 border-t border-border bg-card px-5 py-4 [animation-delay:360ms]" aria-label="Mori navigation">
+        <nav
+          className="slow-rise grid grid-cols-3 gap-2 border-t border-border bg-card px-5 py-4 [animation-delay:360ms]"
+          aria-label="Mori navigation"
+        >
           {["Store", "Revisit", "Reflect"].map((item) => (
             <button
               key={item}
