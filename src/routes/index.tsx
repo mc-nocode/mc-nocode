@@ -334,7 +334,7 @@ function Index() {
           className="slow-rise grid grid-cols-3 gap-2 border-t border-border bg-card px-5 py-4 [animation-delay:360ms]"
           aria-label="Mori navigation"
         >
-          {["Store", "Draft", "Ideas"].map((item) => (
+          {["Home", "Library", "Ideas"].map((item) => (
             <button
               key={item}
               className="rounded-2xl px-3 py-2 text-xs font-medium text-muted-foreground transition duration-500 hover:bg-secondary hover:text-primary focus:outline-none focus:ring-4 focus:ring-ring/15"
