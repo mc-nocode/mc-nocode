@@ -715,6 +715,40 @@ function Index() {
           })}
         </nav>
       </section>
+
+      <Dialog open={!!pendingExit} onOpenChange={(open) => !open && setPendingExit(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save changes?</DialogTitle>
+            <DialogDescription>
+              You have unsaved edits to this draft. Save them before leaving, or discard to revert.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setPendingExit(null)}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={exitDiscardAndGo}
+              className="rounded-[1rem] border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Discard & exit
+            </button>
+            <button
+              type="button"
+              onClick={exitSaveAndGo}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
+            >
+              Save & exit
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
