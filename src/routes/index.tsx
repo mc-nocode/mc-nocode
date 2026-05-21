@@ -653,18 +653,37 @@ function Index() {
             </section>
           )}
 
-          {activeTab === "Ideas" && (
+          {activeTab === "Ideas" && !viewingIdea && (
             <section className="slow-rise space-y-4" aria-label="Ideas">
               <section
                 className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                aria-label="Favorite ideas"
+                aria-label="Have an idea"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                    <p className="text-sm font-medium text-ink-soft">Ideas</p>
+                    <p className="text-sm font-medium text-ink-soft">Have an idea?</p>
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    value={newIdea}
+                    onChange={(event) => setNewIdea(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") addIdea();
+                    }}
+                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                    placeholder="Add a content idea"
+                    type="text"
+                  />
+                  <button
+                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+                    type="button"
+                    onClick={addIdea}
+                  >
+                    Add
+                  </button>
                 </div>
                 <div className="space-y-2.5">
                   {ideas.slice(0, 3).map((idea) => (
@@ -672,7 +691,7 @@ function Index() {
                       key={idea.id}
                       className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
-                      onClick={() => setSelectedIdeaId(idea.id)}
+                      onClick={() => setViewingIdeaId(idea.id)}
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm leading-relaxed text-foreground">
@@ -702,32 +721,13 @@ function Index() {
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    value={newIdea}
-                    onChange={(event) => setNewIdea(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") addIdea();
-                    }}
-                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    placeholder="Add a content idea"
-                    type="text"
-                  />
-                  <button
-                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-                    type="button"
-                    onClick={addIdea}
-                  >
-                    Add
-                  </button>
-                </div>
                 <div className="space-y-2.5">
                   {ideas.map((idea) => (
                     <button
                       key={idea.id}
                       className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
-                      onClick={() => setSelectedIdeaId(idea.id)}
+                      onClick={() => setViewingIdeaId(idea.id)}
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm leading-relaxed text-foreground">
@@ -744,42 +744,78 @@ function Index() {
                     </button>
                   ))}
                 </div>
-                {selectedIdea && (
-                  <article className="rounded-[1.15rem] border border-border bg-card p-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        Idea detail
-                      </p>
-                      <div className="flex gap-1.5">
-                        {["Planned", "Done"].map((status) => (
-                          <button
-                            key={status}
-                            className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground transition hover:bg-accent"
-                            type="button"
-                            onClick={() => updateSelectedStatus(status)}
-                          >
-                            {status}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <textarea
-                      value={selectedIdea.text}
-                      onChange={(event) => updateSelectedIdea(event.target.value)}
-                      className="mt-3 min-h-20 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    />
-                    <div className="mt-3 rounded-[1rem] bg-secondary p-3">
-                      <p className="text-xs font-semibold text-primary">Generated post draft</p>
-                      <p className="mt-2 text-sm leading-relaxed text-foreground">
-                        {generatedDraft.caption}
-                      </p>
-                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                        {generatedDraft.hashtags}
-                      </p>
-                    </div>
-                  </article>
-                )}
               </section>
+            </section>
+          )}
+
+          {activeTab === "Ideas" && viewingIdea && (
+            <section className="slow-rise space-y-5" aria-label="Idea detail">
+              {ideaPhotos[viewingIdea.id] && (
+                <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
+                  <img
+                    src={ideaPhotos[viewingIdea.id]}
+                    alt="Idea photo"
+                    className="aspect-square w-full object-cover"
+                  />
+                </div>
+              )}
+
+              <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Idea detail
+                  </p>
+                  <div className="flex gap-1.5">
+                    {["Planned", "Done"].map((status) => (
+                      <button
+                        key={status}
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                          viewingIdea.status === status
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-secondary-foreground hover:bg-accent"
+                        }`}
+                        type="button"
+                        onClick={() => updateIdeaStatus(viewingIdea.id, status)}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={viewingIdea.text}
+                  onChange={(event) => updateIdeaText(viewingIdea.id, event.target.value)}
+                  className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+                <div className="rounded-[1rem] bg-secondary p-3">
+                  <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                    {generatedDraftForViewing.caption}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {generatedDraftForViewing.hashtags}
+                  </p>
+                </div>
+              </article>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowLibraryPicker(true)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-secondary px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
+                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from Library"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmCreateDraft(true)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20"
+                >
+                  <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
+                  Create Draft
+                </button>
+              </div>
             </section>
           )}
         </div>
