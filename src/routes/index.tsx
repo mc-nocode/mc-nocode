@@ -234,7 +234,7 @@ function Index() {
               className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
               type="button"
               aria-label="Back"
-              onClick={closeDraftDetail}
+              onClick={requestCloseDraft}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
