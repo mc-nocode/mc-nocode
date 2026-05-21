@@ -877,6 +877,66 @@ function Index() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={showLibraryPicker} onOpenChange={setShowLibraryPicker}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add a photo from Library</DialogTitle>
+            <DialogDescription>
+              Pick a photo or video already in your library to attach to this idea.
+            </DialogDescription>
+          </DialogHeader>
+          {library.length === 0 ? (
+            <p className="rounded-[1rem] border border-border bg-surface p-4 text-center text-xs text-muted-foreground">
+              Your library is empty. Add photos or videos in the Library tab first.
+            </p>
+          ) : (
+            <div className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto">
+              {library.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => viewingIdea && attachPhotoToIdea(viewingIdea.id, item.url)}
+                  className="overflow-hidden rounded-[0.85rem] border border-border bg-card transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  {item.kind === "video" ? (
+                    <video src={item.url} className="aspect-square w-full object-cover" muted playsInline />
+                  ) : (
+                    <img src={item.url} alt={item.name} className="aspect-square w-full object-cover" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={confirmCreateDraft} onOpenChange={setConfirmCreateDraft}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create a draft from this idea?</DialogTitle>
+            <DialogDescription>
+              The idea will be converted into a draft and moved to Recent drafts on Home. It will no longer appear in the Ideas tab.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setConfirmCreateDraft(false)}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => viewingIdea && convertIdeaToDraft(viewingIdea)}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
+            >
+              Create draft
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
