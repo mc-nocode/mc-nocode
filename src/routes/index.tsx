@@ -236,6 +236,7 @@ function Index() {
     }
     setActiveTab(tab);
     setSelectedDraftTitle(null);
+    setViewingIdeaId(null);
   };
 
   const performExit = () => {
@@ -259,14 +260,21 @@ function Index() {
     });
   };
 
+  const showBack = !!selectedDraft || (activeTab === "Ideas" && !!viewingIdea);
+  const onBack = () => {
+    if (selectedDraft) requestCloseDraft();
+    else if (viewingIdea) setViewingIdeaId(null);
+  };
 
   const headerTitle = selectedDraft
     ? (draftEdits?.title ?? selectedDraft.title)
-    : activeTab === "Home"
-      ? "Creator Space"
-      : activeTab === "Library"
-        ? "Library"
-        : "Ideas";
+    : viewingIdea && activeTab === "Ideas"
+      ? "Idea"
+      : activeTab === "Home"
+        ? "Creator Space"
+        : activeTab === "Library"
+          ? "Library"
+          : "Ideas";
 
   return (
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
