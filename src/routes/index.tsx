@@ -166,17 +166,56 @@ function Index() {
     });
   };
 
-  const updateDraftNote = (title: string, note: string) => {
-    setDrafts((current) => current.map((d) => (d.title === title ? { ...d, note } : d)));
-  };
-
-  const toggleDraftTag = (title: string, tag: "favorite" | "featured") => {
+  const commitDraftEdits = () => {
+    if (!selectedDraft || !draftEdits) return;
+    const nextTitle = draftEdits.title.trim() || selectedDraft.title;
+    const merged: Draft = { ...draftEdits, title: nextTitle };
     setDrafts((current) =>
-      current.map((d) => (d.title === title ? { ...d, [tag]: !d[tag] } : d)),
+      current.map((d) => (d.title === selectedDraft.title ? merged : d)),
     );
+    setSelectedDraftTitle(nextTitle);
+    setDraftEdits(merged);
   };
 
-  const closeDraftDetail = () => setSelectedDraftTitle(null);
+  const discardDraftEdits = () => {
+    if (selectedDraft) setDraftEdits({ ...selectedDraft });
+  };
+
+  const requestCloseDraft = () => {
+    if (isDirty) setPendingExit({ kind: "back" });
+    else setSelectedDraftTitle(null);
+  };
+
+  const requestSwitchTab = (tab: Tab) => {
+    if (selectedDraft && isDirty && tab !== activeTab) {
+      setPendingExit({ kind: "tab", tab });
+      return;
+    }
+    setActiveTab(tab);
+    setSelectedDraftTitle(null);
+  };
+
+  const performExit = () => {
+    if (!pendingExit) return;
+    if (pendingExit.kind === "tab") setActiveTab(pendingExit.tab);
+    setSelectedDraftTitle(null);
+    setPendingExit(null);
+  };
+
+  const exitSaveAndGo = () => {
+    commitDraftEdits();
+    performExit();
+  };
+
+  const exitDiscardAndGo = () => {
+    setPendingExit((p) => {
+      if (!p) return null;
+      if (p.kind === "tab") setActiveTab(p.tab);
+      setSelectedDraftTitle(null);
+      return null;
+    });
+  };
+
 
   const headerTitle = selectedDraft
     ? selectedDraft.title
