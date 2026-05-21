@@ -474,10 +474,10 @@ function Index() {
 
               <section
                 className="slow-rise space-y-3 [animation-delay:220ms]"
-                aria-label="Recent files"
+                aria-label="Recent drafts"
               >
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Recent files</p>
+                  <p className="text-sm font-medium text-ink-soft">Recent drafts</p>
                   <button className="text-xs font-medium text-primary" type="button">
                     Organize
                   </button>
