@@ -144,6 +144,18 @@ function Index() {
     });
   };
 
+  const updateDraftNote = (title: string, note: string) => {
+    setDrafts((current) => current.map((d) => (d.title === title ? { ...d, note } : d)));
+  };
+
+  const toggleDraftTag = (title: string, tag: "favorite" | "featured") => {
+    setDrafts((current) =>
+      current.map((d) => (d.title === title ? { ...d, [tag]: !d[tag] } : d)),
+    );
+  };
+
+  const closeDraftDetail = () => setSelectedDraftTitle(null);
+
   const headerTitle =
     activeTab === "Home" ? "Creator Space" : activeTab === "Library" ? "Library" : "Ideas";
 
