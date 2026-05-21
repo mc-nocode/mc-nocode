@@ -29,7 +29,7 @@ const actions = [
   { label: "Reflect", detail: "Find angle", icon: PenLine },
 ];
 
-const recentFiles = [
+const initialRecentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
   {
     title: "Saturday walk",
@@ -40,10 +40,19 @@ const recentFiles = [
   { title: "Unused hook idea", meta: "Photo · last week", status: "Archived", icon: FileImage },
 ];
 
-const drafts = [
-  { title: "Kitchen light", time: "12 min ago", image: moriPhoto },
-  { title: "Window notes", time: "Yesterday", image: moriPhoto },
-  { title: "Before archive", time: "2 days ago", image: moriPhoto },
+type Draft = {
+  title: string;
+  time: string;
+  image: string;
+  note: string;
+  favorite: boolean;
+  featured: boolean;
+};
+
+const initialDrafts: Draft[] = [
+  { title: "Kitchen light", time: "12 min ago", image: moriPhoto, note: "", favorite: false, featured: false },
+  { title: "Window notes", time: "Yesterday", image: moriPhoto, note: "", favorite: false, featured: true },
+  { title: "Before archive", time: "2 days ago", image: moriPhoto, note: "", favorite: true, featured: false },
 ];
 
 const initialContentIdeas = [
