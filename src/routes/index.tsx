@@ -443,8 +443,11 @@ function Index() {
                       Morning reel cover
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      A calm visual starting point for a thoughtful post, reel, or carousel.
+                      A calm visual starting point for a thoughtful post, reel, or carousel. Natural light, soft textures, and a quiet moment that invites people to pause and look closer.
                     </p>
+                    <button className="mt-2 text-xs font-medium text-primary" type="button">
+                      See more
+                    </button>
                     <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Featured draft choices">
                       {actions.map((action) => {
                         const Icon = action.icon;
