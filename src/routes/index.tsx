@@ -168,13 +168,24 @@ function Index() {
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
       <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.15rem] border border-border bg-background shadow-phone">
         <header className="slow-rise flex items-center justify-between px-5 pb-4 pt-5">
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
-            type="button"
-            aria-label="Search Mori"
-          >
-            <Search className="h-4 w-4" aria-hidden="true" />
-          </button>
+          {selectedDraft ? (
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
+              type="button"
+              aria-label="Back"
+              onClick={closeDraftDetail}
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            </button>
+          ) : (
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
+              type="button"
+              aria-label="Search Mori"
+            >
+              <Search className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
           <div className="text-center">
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
             <h1 className="mt-1 text-base font-semibold text-foreground">{headerTitle}</h1>
