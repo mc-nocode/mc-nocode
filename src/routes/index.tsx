@@ -123,15 +123,13 @@ function Index() {
     if (!text) return;
     const idea = { id: Date.now(), text, status: "Idea" };
     setIdeas((current) => [idea, ...current]);
-    setSelectedIdeaId(idea.id);
     setNewIdea("");
   };
 
   const viewingIdea = ideas.find((i) => i.id === viewingIdeaId) ?? null;
-  const ideaForDraft = viewingIdea ?? selectedIdea;
   const generatedDraftForViewing = useMemo(
-    () => buildPostDraft(ideaForDraft?.text ?? "Share one quiet creative detail from this draft."),
-    [ideaForDraft?.text],
+    () => buildPostDraft(viewingIdea?.text ?? "Share one quiet creative detail from this draft."),
+    [viewingIdea?.text],
   );
 
   const updateIdeaText = (id: number, text: string) => {
@@ -166,17 +164,6 @@ function Index() {
     setConfirmCreateDraft(false);
   };
 
-  const updateSelectedIdea = (text: string) => {
-    setIdeas((current) =>
-      current.map((idea) => (idea.id === selectedIdeaId ? { ...idea, text } : idea)),
-    );
-  };
-
-  const updateSelectedStatus = (status: ContentIdea["status"]) => {
-    setIdeas((current) =>
-      current.map((idea) => (idea.id === selectedIdeaId ? { ...idea, status } : idea)),
-    );
-  };
 
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
