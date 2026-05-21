@@ -113,12 +113,7 @@ function Index() {
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
-  const [selectedIdeaId, setSelectedIdeaId] = useState(initialContentIdeas[0].id);
-  const selectedIdea = ideas.find((idea) => idea.id === selectedIdeaId) ?? ideas[0];
-  const generatedDraft = useMemo(
-    () => buildPostDraft(selectedIdea?.text ?? "Share one quiet creative detail from this draft."),
-    [selectedIdea?.text],
-  );
+
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
