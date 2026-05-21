@@ -80,6 +80,11 @@ type Tab = "Home" | "Library" | "Ideas";
 
 function Index() {
   const [activeTab, setActiveTab] = useState<Tab>("Home");
+  const [drafts, setDrafts] = useState<Draft[]>(initialDrafts);
+  const [selectedDraftTitle, setSelectedDraftTitle] = useState<string | null>(null);
+  const selectedDraft = drafts.find((d) => d.title === selectedDraftTitle) ?? null;
+  const [recentFiles] = useState(initialRecentFiles);
+
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
   const [selectedIdeaId, setSelectedIdeaId] = useState(initialContentIdeas[0].id);
