@@ -1,7 +1,8 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
+  Bookmark,
   ChevronLeft,
   ChevronRight,
   Clock3,
@@ -18,6 +19,14 @@ import {
   Trash2,
 } from "lucide-react";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/")({
   component: Index,
