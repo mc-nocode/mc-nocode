@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
+  ChevronLeft,
   ChevronRight,
   Clock3,
   FileImage,
@@ -13,6 +14,7 @@ import {
   PenLine,
   Plus,
   Search,
+  Star,
   Trash2,
 } from "lucide-react";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
