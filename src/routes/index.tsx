@@ -156,8 +156,13 @@ function Index() {
 
   const closeDraftDetail = () => setSelectedDraftTitle(null);
 
-  const headerTitle =
-    activeTab === "Home" ? "Creator Space" : activeTab === "Library" ? "Library" : "Ideas";
+  const headerTitle = selectedDraft
+    ? selectedDraft.title
+    : activeTab === "Home"
+      ? "Creator Space"
+      : activeTab === "Library"
+        ? "Library"
+        : "Ideas";
 
   return (
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
