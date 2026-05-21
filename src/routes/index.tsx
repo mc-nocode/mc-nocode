@@ -602,7 +602,10 @@ function Index() {
                     : "text-muted-foreground hover:bg-secondary hover:text-primary"
                 }`}
                 type="button"
-                onClick={() => setActiveTab(item)}
+                onClick={() => {
+                  setActiveTab(item);
+                  setSelectedDraftTitle(null);
+                }}
               >
                 {item}
               </button>
