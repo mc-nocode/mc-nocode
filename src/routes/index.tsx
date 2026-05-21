@@ -94,7 +94,11 @@ function Index() {
   const selectedDraft = drafts.find((d) => d.title === selectedDraftTitle) ?? null;
   const [draftEdits, setDraftEdits] = useState<Draft | null>(null);
   const [pendingExit, setPendingExit] = useState<null | { kind: "back" } | { kind: "tab"; tab: Tab }>(null);
-  const [recentFiles] = useState(initialRecentFiles);
+  const [recentFiles, setRecentFiles] = useState<typeof initialRecentFiles>(initialRecentFiles);
+  const [viewingIdeaId, setViewingIdeaId] = useState<number | null>(null);
+  const [ideaPhotos, setIdeaPhotos] = useState<Record<number, string>>({});
+  const [showLibraryPicker, setShowLibraryPicker] = useState(false);
+  const [confirmCreateDraft, setConfirmCreateDraft] = useState(false);
 
   useEffect(() => {
     setDraftEdits(selectedDraft ? { ...selectedDraft } : null);
