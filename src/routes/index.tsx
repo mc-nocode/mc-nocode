@@ -371,15 +371,15 @@ function Index() {
 
           {activeTab === "Home" && !selectedDraft && (
             <>
-              <section className="slow-rise space-y-3 [animation-delay:80ms]" aria-label="Drafts">
+              <section className="slow-rise space-y-3 [animation-delay:80ms]" aria-label="Favorites">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Drafts</p>
+                  <p className="text-sm font-medium text-ink-soft">Keep going</p>
                   <button className="text-xs font-medium text-primary" type="button">
                     View all
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2.5">
-                  {drafts.map((draft) => (
+                  {drafts.filter((d) => d.favorite).map((draft) => (
                     <button
                       key={draft.title}
                       className="quiet-card relative overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
