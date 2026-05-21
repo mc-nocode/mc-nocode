@@ -603,94 +603,132 @@ function Index() {
           )}
 
           {activeTab === "Ideas" && (
-            <section
-              className="slow-rise space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-              aria-label="Content ideas"
-            >
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                  <p className="text-sm font-medium text-ink-soft">Content ideas</p>
+            <section className="slow-rise space-y-4" aria-label="Ideas">
+              <section
+                className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
+                aria-label="Favorite ideas"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
+                    <p className="text-sm font-medium text-ink-soft">Ideas</p>
+                  </div>
+                  <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
-              </div>
-              <div className="flex gap-2">
-                <input
-                  value={newIdea}
-                  onChange={(event) => setNewIdea(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") addIdea();
-                  }}
-                  className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                  placeholder="Add a content idea"
-                  type="text"
-                />
-                <button
-                  className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-                  type="button"
-                  onClick={addIdea}
-                >
-                  Add
-                </button>
-              </div>
-              <div className="space-y-2.5">
-                {ideas.map((idea) => (
-                  <button
-                    key={idea.id}
-                    className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
-                    type="button"
-                    onClick={() => setSelectedIdeaId(idea.id)}
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm leading-relaxed text-foreground">
-                        {idea.text}
+                <div className="space-y-2.5">
+                  {ideas.slice(0, 3).map((idea) => (
+                    <button
+                      key={idea.id}
+                      className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      type="button"
+                      onClick={() => setSelectedIdeaId(idea.id)}
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm leading-relaxed text-foreground">
+                          {idea.text}
+                        </span>
+                        <span className="mt-1 block text-[11px] text-muted-foreground">
+                          {idea.status}
+                        </span>
                       </span>
-                      <span className="mt-1 block text-[11px] text-muted-foreground">
-                        {idea.status}
-                      </span>
-                    </span>
-                    <ChevronRight
-                      className="mt-0.5 h-4 w-4 shrink-0 text-primary"
-                      aria-hidden="true"
-                    />
-                  </button>
-                ))}
-              </div>
-              {selectedIdea && (
-                <article className="rounded-[1.15rem] border border-border bg-card p-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                      Idea detail
-                    </p>
-                    <div className="flex gap-1.5">
-                      {["Planned", "Done"].map((status) => (
-                        <button
-                          key={status}
-                          className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground transition hover:bg-accent"
-                          type="button"
-                          onClick={() => updateSelectedStatus(status)}
-                        >
-                          {status}
-                        </button>
-                      ))}
-                    </div>
+                      <ChevronRight
+                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </section>
+
+              <section
+                className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
+                aria-label="Content ideas"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
+                    <p className="text-sm font-medium text-ink-soft">Content ideas</p>
                   </div>
-                  <textarea
-                    value={selectedIdea.text}
-                    onChange={(event) => updateSelectedIdea(event.target.value)}
-                    className="mt-3 min-h-20 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
+                  <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    value={newIdea}
+                    onChange={(event) => setNewIdea(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") addIdea();
+                    }}
+                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                    placeholder="Add a content idea"
+                    type="text"
                   />
-                  <div className="mt-3 rounded-[1rem] bg-secondary p-3">
-                    <p className="text-xs font-semibold text-primary">Generated post draft</p>
-                    <p className="mt-2 text-sm leading-relaxed text-foreground">
-                      {generatedDraft.caption}
-                    </p>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      {generatedDraft.hashtags}
-                    </p>
-                  </div>
-                </article>
-              )}
+                  <button
+                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+                    type="button"
+                    onClick={addIdea}
+                  >
+                    Add
+                  </button>
+                </div>
+                <div className="space-y-2.5">
+                  {ideas.map((idea) => (
+                    <button
+                      key={idea.id}
+                      className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      type="button"
+                      onClick={() => setSelectedIdeaId(idea.id)}
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm leading-relaxed text-foreground">
+                          {idea.text}
+                        </span>
+                        <span className="mt-1 block text-[11px] text-muted-foreground">
+                          {idea.status}
+                        </span>
+                      </span>
+                      <ChevronRight
+                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  ))}
+                </div>
+                {selectedIdea && (
+                  <article className="rounded-[1.15rem] border border-border bg-card p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Idea detail
+                      </p>
+                      <div className="flex gap-1.5">
+                        {["Planned", "Done"].map((status) => (
+                          <button
+                            key={status}
+                            className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground transition hover:bg-accent"
+                            type="button"
+                            onClick={() => updateSelectedStatus(status)}
+                          >
+                            {status}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <textarea
+                      value={selectedIdea.text}
+                      onChange={(event) => updateSelectedIdea(event.target.value)}
+                      className="mt-3 min-h-20 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
+                    />
+                    <div className="mt-3 rounded-[1rem] bg-secondary p-3">
+                      <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground">
+                        {generatedDraft.caption}
+                      </p>
+                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                        {generatedDraft.hashtags}
+                      </p>
+                    </div>
+                  </article>
+                )}
+              </section>
             </section>
           )}
         </div>
