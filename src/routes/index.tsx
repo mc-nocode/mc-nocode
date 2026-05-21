@@ -218,7 +218,7 @@ function Index() {
 
 
   const headerTitle = selectedDraft
-    ? selectedDraft.title
+    ? (draftEdits?.title ?? selectedDraft.title)
     : activeTab === "Home"
       ? "Creator Space"
       : activeTab === "Library"
