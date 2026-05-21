@@ -92,7 +92,20 @@ function Index() {
   const [drafts, setDrafts] = useState<Draft[]>(initialDrafts);
   const [selectedDraftTitle, setSelectedDraftTitle] = useState<string | null>(null);
   const selectedDraft = drafts.find((d) => d.title === selectedDraftTitle) ?? null;
+  const [draftEdits, setDraftEdits] = useState<Draft | null>(null);
+  const [pendingExit, setPendingExit] = useState<null | { kind: "back" } | { kind: "tab"; tab: Tab }>(null);
   const [recentFiles] = useState(initialRecentFiles);
+
+  useEffect(() => {
+    setDraftEdits(selectedDraft ? { ...selectedDraft } : null);
+  }, [selectedDraftTitle]);
+
+  const isDirty = !!(selectedDraft && draftEdits && (
+    draftEdits.title.trim() !== selectedDraft.title ||
+    draftEdits.note !== selectedDraft.note ||
+    draftEdits.favorite !== selectedDraft.favorite ||
+    draftEdits.featured !== selectedDraft.featured
+  ));
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
