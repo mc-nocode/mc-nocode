@@ -399,7 +399,7 @@ function Index() {
                             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
                           )}
                           {draft.featured && (
-                            <PenLine className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                            <Bookmark className="h-3.5 w-3.5 fill-primary text-primary" aria-hidden="true" />
                           )}
                         </div>
                       )}
