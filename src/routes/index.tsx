@@ -132,6 +132,45 @@ function Index() {
     setNewIdea("");
   };
 
+  const viewingIdea = ideas.find((i) => i.id === viewingIdeaId) ?? null;
+  const ideaForDraft = viewingIdea ?? selectedIdea;
+  const generatedDraftForViewing = useMemo(
+    () => buildPostDraft(ideaForDraft?.text ?? "Share one quiet creative detail from this draft."),
+    [ideaForDraft?.text],
+  );
+
+  const updateIdeaText = (id: number, text: string) => {
+    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, text } : i)));
+  };
+
+  const updateIdeaStatus = (id: number, status: ContentIdea["status"]) => {
+    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, status } : i)));
+  };
+
+  const attachPhotoToIdea = (ideaId: number, url: string) => {
+    setIdeaPhotos((current) => ({ ...current, [ideaId]: url }));
+    setShowLibraryPicker(false);
+  };
+
+  const convertIdeaToDraft = (idea: ContentIdea) => {
+    const title = idea.text.length > 40 ? idea.text.slice(0, 40).trim() + "…" : idea.text;
+    const file = {
+      title,
+      meta: "Draft · just now",
+      status: "Draft",
+      icon: PenLine,
+    };
+    setRecentFiles((current) => [file, ...current]);
+    setIdeas((current) => current.filter((i) => i.id !== idea.id));
+    setIdeaPhotos((current) => {
+      const next = { ...current };
+      delete next[idea.id];
+      return next;
+    });
+    setViewingIdeaId(null);
+    setConfirmCreateDraft(false);
+  };
+
   const updateSelectedIdea = (text: string) => {
     setIdeas((current) =>
       current.map((idea) => (idea.id === selectedIdeaId ? { ...idea, text } : idea)),
