@@ -203,7 +203,68 @@ function Index() {
         </header>
 
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
-          {activeTab === "Home" && (
+          {activeTab === "Home" && selectedDraft && (
+            <section className="slow-rise space-y-5" aria-label="Draft detail">
+              <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
+                <img
+                  src={selectedDraft.image}
+                  alt={`${selectedDraft.title} draft`}
+                  width={320}
+                  height={320}
+                  className="aspect-square w-full object-cover"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleDraftTag(selectedDraft.title, "favorite")}
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-[1rem] border px-3 py-2.5 text-xs font-semibold transition duration-500 focus:outline-none focus:ring-4 focus:ring-ring/15 ${
+                    selectedDraft.favorite
+                      ? "border-amber-300 bg-amber-50 text-amber-700"
+                      : "border-border bg-secondary text-foreground hover:bg-accent"
+                  }`}
+                >
+                  <Star
+                    className={`h-3.5 w-3.5 ${selectedDraft.favorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`}
+                    aria-hidden="true"
+                  />
+                  {selectedDraft.favorite ? "Favorited" : "Mark Favorite"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleDraftTag(selectedDraft.title, "featured")}
+                  className={`flex flex-1 items-center justify-center gap-2 rounded-[1rem] border px-3 py-2.5 text-xs font-semibold transition duration-500 focus:outline-none focus:ring-4 focus:ring-ring/15 ${
+                    selectedDraft.featured
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-secondary text-foreground hover:bg-accent"
+                  }`}
+                >
+                  <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
+                  {selectedDraft.featured ? "Featured" : "Mark Featured"}
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  Notes
+                </p>
+                <textarea
+                  value={selectedDraft.note}
+                  onChange={(event) => updateDraftNote(selectedDraft.title, event.target.value)}
+                  placeholder="Add notes about this draft..."
+                  className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                <Clock3 className="h-3 w-3" aria-hidden="true" />
+                <span>Last edited {selectedDraft.time}</span>
+              </div>
+            </section>
+          )}
+
+          {activeTab === "Home" && !selectedDraft && (
             <>
               <section className="slow-rise space-y-3 [animation-delay:80ms]" aria-label="Drafts">
                 <div className="flex items-center justify-between px-1">
@@ -216,8 +277,9 @@ function Index() {
                   {drafts.map((draft) => (
                     <button
                       key={draft.title}
-                      className="quiet-card overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      className="quiet-card relative overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
+                      onClick={() => setSelectedDraftTitle(draft.title)}
                     >
                       <img
                         src={draft.image}
@@ -226,6 +288,16 @@ function Index() {
                         height={240}
                         className="aspect-square w-full object-cover"
                       />
+                      {(draft.favorite || draft.featured) && (
+                        <div className="absolute right-2 top-2 flex gap-1">
+                          {draft.favorite && (
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+                          )}
+                          {draft.featured && (
+                            <PenLine className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                          )}
+                        </div>
+                      )}
                       <span className="block p-2.5">
                         <span className="block truncate text-xs font-semibold text-foreground">
                           {draft.title}
