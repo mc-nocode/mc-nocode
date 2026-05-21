@@ -280,12 +280,12 @@ function Index() {
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
       <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.15rem] border border-border bg-background shadow-phone">
         <header className="slow-rise flex items-center justify-between px-5 pb-4 pt-5">
-          {selectedDraft ? (
+          {showBack ? (
             <button
               className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
               type="button"
               aria-label="Back"
-              onClick={requestCloseDraft}
+              onClick={onBack}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
