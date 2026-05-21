@@ -264,7 +264,7 @@ function Index() {
         </header>
 
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
-          {activeTab === "Home" && selectedDraft && (
+          {activeTab === "Home" && selectedDraft && draftEdits && (
             <section className="slow-rise space-y-5" aria-label="Draft detail">
               <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
                 <img
@@ -276,33 +276,55 @@ function Index() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground" htmlFor="draft-title">
+                  Title
+                </label>
+                <input
+                  id="draft-title"
+                  value={draftEdits.title}
+                  onChange={(event) =>
+                    setDraftEdits((d) => (d ? { ...d, title: event.target.value } : d))
+                  }
+                  placeholder="Draft title"
+                  className="w-full rounded-[1rem] border border-input bg-background px-3 py-2.5 text-base font-semibold text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+              </div>
+
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => toggleDraftTag(selectedDraft.title, "favorite")}
+                  onClick={() =>
+                    setDraftEdits((d) => (d ? { ...d, favorite: !d.favorite } : d))
+                  }
                   className={`flex flex-1 items-center justify-center gap-2 rounded-[1rem] border px-3 py-2.5 text-xs font-semibold transition duration-500 focus:outline-none focus:ring-4 focus:ring-ring/15 ${
-                    selectedDraft.favorite
+                    draftEdits.favorite
                       ? "border-amber-300 bg-amber-50 text-amber-700"
                       : "border-border bg-secondary text-foreground hover:bg-accent"
                   }`}
                 >
                   <Star
-                    className={`h-3.5 w-3.5 ${selectedDraft.favorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`}
+                    className={`h-3.5 w-3.5 ${draftEdits.favorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`}
                     aria-hidden="true"
                   />
-                  {selectedDraft.favorite ? "Favorited" : "Mark Favorite"}
+                  {draftEdits.favorite ? "Favorited" : "Mark Favorite"}
                 </button>
                 <button
                   type="button"
-                  onClick={() => toggleDraftTag(selectedDraft.title, "featured")}
+                  onClick={() =>
+                    setDraftEdits((d) => (d ? { ...d, featured: !d.featured } : d))
+                  }
                   className={`flex flex-1 items-center justify-center gap-2 rounded-[1rem] border px-3 py-2.5 text-xs font-semibold transition duration-500 focus:outline-none focus:ring-4 focus:ring-ring/15 ${
-                    selectedDraft.featured
+                    draftEdits.featured
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-border bg-secondary text-foreground hover:bg-accent"
                   }`}
                 >
-                  <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
-                  {selectedDraft.featured ? "Featured" : "Mark Featured"}
+                  <Bookmark
+                    className={`h-3.5 w-3.5 ${draftEdits.featured ? "fill-primary text-primary" : ""}`}
+                    aria-hidden="true"
+                  />
+                  {draftEdits.featured ? "Featured" : "Mark Featured"}
                 </button>
               </div>
 
@@ -311,8 +333,10 @@ function Index() {
                   Notes
                 </p>
                 <textarea
-                  value={selectedDraft.note}
-                  onChange={(event) => updateDraftNote(selectedDraft.title, event.target.value)}
+                  value={draftEdits.note}
+                  onChange={(event) =>
+                    setDraftEdits((d) => (d ? { ...d, note: event.target.value } : d))
+                  }
                   placeholder="Add notes about this draft..."
                   className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
                 />
@@ -322,8 +346,28 @@ function Index() {
                 <Clock3 className="h-3 w-3" aria-hidden="true" />
                 <span>Last edited {selectedDraft.time}</span>
               </div>
+
+              {isDirty && (
+                <div className="sticky bottom-0 -mx-5 flex gap-2 border-t border-border bg-background/95 px-5 py-3 backdrop-blur">
+                  <button
+                    type="button"
+                    onClick={discardDraftEdits}
+                    className="flex-1 rounded-[1rem] border border-border bg-secondary px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  >
+                    Discard
+                  </button>
+                  <button
+                    type="button"
+                    onClick={commitDraftEdits}
+                    className="flex-1 rounded-[1rem] bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              )}
             </section>
           )}
+
 
           {activeTab === "Home" && !selectedDraft && (
             <>
