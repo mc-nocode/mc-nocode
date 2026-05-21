@@ -94,7 +94,11 @@ function Index() {
   const selectedDraft = drafts.find((d) => d.title === selectedDraftTitle) ?? null;
   const [draftEdits, setDraftEdits] = useState<Draft | null>(null);
   const [pendingExit, setPendingExit] = useState<null | { kind: "back" } | { kind: "tab"; tab: Tab }>(null);
-  const [recentFiles] = useState(initialRecentFiles);
+  const [recentFiles, setRecentFiles] = useState<typeof initialRecentFiles>(initialRecentFiles);
+  const [viewingIdeaId, setViewingIdeaId] = useState<number | null>(null);
+  const [ideaPhotos, setIdeaPhotos] = useState<Record<number, string>>({});
+  const [showLibraryPicker, setShowLibraryPicker] = useState(false);
+  const [confirmCreateDraft, setConfirmCreateDraft] = useState(false);
 
   useEffect(() => {
     setDraftEdits(selectedDraft ? { ...selectedDraft } : null);
@@ -109,12 +113,7 @@ function Index() {
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
-  const [selectedIdeaId, setSelectedIdeaId] = useState(initialContentIdeas[0].id);
-  const selectedIdea = ideas.find((idea) => idea.id === selectedIdeaId) ?? ideas[0];
-  const generatedDraft = useMemo(
-    () => buildPostDraft(selectedIdea?.text ?? "Share one quiet creative detail from this draft."),
-    [selectedIdea?.text],
-  );
+
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -124,21 +123,47 @@ function Index() {
     if (!text) return;
     const idea = { id: Date.now(), text, status: "Idea" };
     setIdeas((current) => [idea, ...current]);
-    setSelectedIdeaId(idea.id);
     setNewIdea("");
   };
 
-  const updateSelectedIdea = (text: string) => {
-    setIdeas((current) =>
-      current.map((idea) => (idea.id === selectedIdeaId ? { ...idea, text } : idea)),
-    );
+  const viewingIdea = ideas.find((i) => i.id === viewingIdeaId) ?? null;
+  const generatedDraftForViewing = useMemo(
+    () => buildPostDraft(viewingIdea?.text ?? "Share one quiet creative detail from this draft."),
+    [viewingIdea?.text],
+  );
+
+  const updateIdeaText = (id: number, text: string) => {
+    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, text } : i)));
   };
 
-  const updateSelectedStatus = (status: ContentIdea["status"]) => {
-    setIdeas((current) =>
-      current.map((idea) => (idea.id === selectedIdeaId ? { ...idea, status } : idea)),
-    );
+  const updateIdeaStatus = (id: number, status: ContentIdea["status"]) => {
+    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, status } : i)));
   };
+
+  const attachPhotoToIdea = (ideaId: number, url: string) => {
+    setIdeaPhotos((current) => ({ ...current, [ideaId]: url }));
+    setShowLibraryPicker(false);
+  };
+
+  const convertIdeaToDraft = (idea: ContentIdea) => {
+    const title = idea.text.length > 40 ? idea.text.slice(0, 40).trim() + "…" : idea.text;
+    const file = {
+      title,
+      meta: "Draft · just now",
+      status: "Draft",
+      icon: PenLine,
+    };
+    setRecentFiles((current) => [file, ...current]);
+    setIdeas((current) => current.filter((i) => i.id !== idea.id));
+    setIdeaPhotos((current) => {
+      const next = { ...current };
+      delete next[idea.id];
+      return next;
+    });
+    setViewingIdeaId(null);
+    setConfirmCreateDraft(false);
+  };
+
 
   const handleFiles = (files: FileList | null) => {
     if (!files) return;
@@ -193,6 +218,7 @@ function Index() {
     }
     setActiveTab(tab);
     setSelectedDraftTitle(null);
+    setViewingIdeaId(null);
   };
 
   const performExit = () => {
@@ -216,25 +242,32 @@ function Index() {
     });
   };
 
+  const showBack = !!selectedDraft || (activeTab === "Ideas" && !!viewingIdea);
+  const onBack = () => {
+    if (selectedDraft) requestCloseDraft();
+    else if (viewingIdea) setViewingIdeaId(null);
+  };
 
   const headerTitle = selectedDraft
     ? (draftEdits?.title ?? selectedDraft.title)
-    : activeTab === "Home"
-      ? "Creator Space"
-      : activeTab === "Library"
-        ? "Library"
-        : "Ideas";
+    : viewingIdea && activeTab === "Ideas"
+      ? "Idea"
+      : activeTab === "Home"
+        ? "Creator Space"
+        : activeTab === "Library"
+          ? "Library"
+          : "Ideas";
 
   return (
     <main className="mori-grain min-h-screen overflow-hidden px-4 py-6 text-foreground sm:px-8">
       <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-[430px] flex-col overflow-hidden rounded-[2.15rem] border border-border bg-background shadow-phone">
         <header className="slow-rise flex items-center justify-between px-5 pb-4 pt-5">
-          {selectedDraft ? (
+          {showBack ? (
             <button
               className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary transition duration-500 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/20"
               type="button"
               aria-label="Back"
-              onClick={requestCloseDraft}
+              onClick={onBack}
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -602,18 +635,37 @@ function Index() {
             </section>
           )}
 
-          {activeTab === "Ideas" && (
+          {activeTab === "Ideas" && !viewingIdea && (
             <section className="slow-rise space-y-4" aria-label="Ideas">
               <section
                 className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                aria-label="Favorite ideas"
+                aria-label="Have an idea"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                    <p className="text-sm font-medium text-ink-soft">Ideas</p>
+                    <p className="text-sm font-medium text-ink-soft">Have an idea?</p>
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    value={newIdea}
+                    onChange={(event) => setNewIdea(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") addIdea();
+                    }}
+                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                    placeholder="Add a content idea"
+                    type="text"
+                  />
+                  <button
+                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+                    type="button"
+                    onClick={addIdea}
+                  >
+                    Add
+                  </button>
                 </div>
                 <div className="space-y-2.5">
                   {ideas.slice(0, 3).map((idea) => (
@@ -621,7 +673,7 @@ function Index() {
                       key={idea.id}
                       className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
-                      onClick={() => setSelectedIdeaId(idea.id)}
+                      onClick={() => setViewingIdeaId(idea.id)}
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm leading-relaxed text-foreground">
@@ -651,32 +703,13 @@ function Index() {
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    value={newIdea}
-                    onChange={(event) => setNewIdea(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") addIdea();
-                    }}
-                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    placeholder="Add a content idea"
-                    type="text"
-                  />
-                  <button
-                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-                    type="button"
-                    onClick={addIdea}
-                  >
-                    Add
-                  </button>
-                </div>
                 <div className="space-y-2.5">
                   {ideas.map((idea) => (
                     <button
                       key={idea.id}
                       className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
-                      onClick={() => setSelectedIdeaId(idea.id)}
+                      onClick={() => setViewingIdeaId(idea.id)}
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm leading-relaxed text-foreground">
@@ -693,42 +726,78 @@ function Index() {
                     </button>
                   ))}
                 </div>
-                {selectedIdea && (
-                  <article className="rounded-[1.15rem] border border-border bg-card p-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        Idea detail
-                      </p>
-                      <div className="flex gap-1.5">
-                        {["Planned", "Done"].map((status) => (
-                          <button
-                            key={status}
-                            className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-secondary-foreground transition hover:bg-accent"
-                            type="button"
-                            onClick={() => updateSelectedStatus(status)}
-                          >
-                            {status}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <textarea
-                      value={selectedIdea.text}
-                      onChange={(event) => updateSelectedIdea(event.target.value)}
-                      className="mt-3 min-h-20 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
-                    />
-                    <div className="mt-3 rounded-[1rem] bg-secondary p-3">
-                      <p className="text-xs font-semibold text-primary">Generated post draft</p>
-                      <p className="mt-2 text-sm leading-relaxed text-foreground">
-                        {generatedDraft.caption}
-                      </p>
-                      <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                        {generatedDraft.hashtags}
-                      </p>
-                    </div>
-                  </article>
-                )}
               </section>
+            </section>
+          )}
+
+          {activeTab === "Ideas" && viewingIdea && (
+            <section className="slow-rise space-y-5" aria-label="Idea detail">
+              {ideaPhotos[viewingIdea.id] && (
+                <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
+                  <img
+                    src={ideaPhotos[viewingIdea.id]}
+                    alt="Idea photo"
+                    className="aspect-square w-full object-cover"
+                  />
+                </div>
+              )}
+
+              <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Idea detail
+                  </p>
+                  <div className="flex gap-1.5">
+                    {["Planned", "Done"].map((status) => (
+                      <button
+                        key={status}
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                          viewingIdea.status === status
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary text-secondary-foreground hover:bg-accent"
+                        }`}
+                        type="button"
+                        onClick={() => updateIdeaStatus(viewingIdea.id, status)}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={viewingIdea.text}
+                  onChange={(event) => updateIdeaText(viewingIdea.id, event.target.value)}
+                  className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+                <div className="rounded-[1rem] bg-secondary p-3">
+                  <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                    {generatedDraftForViewing.caption}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {generatedDraftForViewing.hashtags}
+                  </p>
+                </div>
+              </article>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowLibraryPicker(true)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-secondary px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
+                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from Library"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmCreateDraft(true)}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20"
+                >
+                  <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
+                  Create Draft
+                </button>
+              </div>
             </section>
           )}
         </div>
@@ -786,6 +855,66 @@ function Index() {
               className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
             >
               Save & exit
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showLibraryPicker} onOpenChange={setShowLibraryPicker}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add a photo from Library</DialogTitle>
+            <DialogDescription>
+              Pick a photo or video already in your library to attach to this idea.
+            </DialogDescription>
+          </DialogHeader>
+          {library.length === 0 ? (
+            <p className="rounded-[1rem] border border-border bg-surface p-4 text-center text-xs text-muted-foreground">
+              Your library is empty. Add photos or videos in the Library tab first.
+            </p>
+          ) : (
+            <div className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto">
+              {library.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => viewingIdea && attachPhotoToIdea(viewingIdea.id, item.url)}
+                  className="overflow-hidden rounded-[0.85rem] border border-border bg-card transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  {item.kind === "video" ? (
+                    <video src={item.url} className="aspect-square w-full object-cover" muted playsInline />
+                  ) : (
+                    <img src={item.url} alt={item.name} className="aspect-square w-full object-cover" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={confirmCreateDraft} onOpenChange={setConfirmCreateDraft}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create a draft from this idea?</DialogTitle>
+            <DialogDescription>
+              The idea will be converted into a draft and moved to Recent drafts on Home. It will no longer appear in the Ideas tab.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setConfirmCreateDraft(false)}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => viewingIdea && convertIdeaToDraft(viewingIdea)}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
+            >
+              Create draft
             </button>
           </DialogFooter>
         </DialogContent>
