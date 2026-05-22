@@ -648,48 +648,36 @@ function Index() {
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <div className="flex gap-2">
-                  <input
+
+                <article className="space-y-3 rounded-[1.25rem] border border-border bg-background p-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    New idea
+                  </p>
+                  <textarea
                     value={newIdea}
                     onChange={(event) => setNewIdea(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") addIdea();
-                    }}
-                    className="min-w-0 flex-1 rounded-[1rem] border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
                     placeholder="Add a content idea"
-                    type="text"
+                    className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
                   />
-                  <button
-                    className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-                    type="button"
-                    onClick={addIdea}
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="space-y-2.5">
-                  {ideas.slice(0, 3).map((idea) => (
-                    <button
-                      key={idea.id}
-                      className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
-                      type="button"
-                      onClick={() => setViewingIdeaId(idea.id)}
-                    >
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm leading-relaxed text-foreground">
-                          {idea.text}
-                        </span>
-                        <span className="mt-1 block text-[11px] text-muted-foreground">
-                          {idea.status}
-                        </span>
-                      </span>
-                      <ChevronRight
-                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  ))}
-                </div>
+                  <div className="rounded-[1rem] bg-secondary p-3">
+                    <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground">
+                      {buildPostDraft(newIdea.trim() || "your idea will shape a calm, useful post here.").caption}
+                    </p>
+                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                      {buildPostDraft(newIdea.trim() || "").hashtags}
+                    </p>
+                  </div>
+                </article>
+
+                <button
+                  className="w-full rounded-[1rem] bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20 disabled:opacity-50 disabled:hover:scale-100"
+                  type="button"
+                  onClick={addIdea}
+                  disabled={!newIdea.trim()}
+                >
+                  Save idea
+                </button>
               </section>
 
               <section
