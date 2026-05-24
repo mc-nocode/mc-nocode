@@ -113,6 +113,23 @@ function Index() {
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
+  const [draftSeed, setDraftSeed] = useState(0);
+
+  const draftVariants = [
+    (idea: string) => `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
+    (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
+    (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
+  ];
+  const hashtagVariants = [
+    "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
+    "#creativeprocess #behindthescenes #makersgonnamake #quietcreative #mori",
+    "#dailycreative #studiolife #intentionalcontent #craftovercontent #mori",
+  ];
+  const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
+  const previewDraft = {
+    caption: draftVariants[draftSeed % draftVariants.length](previewIdeaText),
+    hashtags: hashtagVariants[draftSeed % hashtagVariants.length],
+  };
 
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
@@ -637,39 +654,34 @@ function Index() {
 
           {activeTab === "Ideas" && !viewingIdea && (
             <section className="slow-rise space-y-4" aria-label="Ideas">
-              <section
-                className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                aria-label="Have an idea"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                    <p className="text-sm font-medium text-ink-soft">Have an idea?</p>
-                  </div>
-                  <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
-                </div>
-
-                <article className="space-y-3 rounded-[1.25rem] border border-border bg-background p-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    New idea
-                  </p>
-                  <textarea
-                    value={newIdea}
-                    onChange={(event) => setNewIdea(event.target.value)}
-                    placeholder="Add a content idea"
-                    className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                  />
-                  <div className="rounded-[1rem] bg-secondary p-3">
+              <article className="space-y-3 rounded-[1.25rem] border border-border bg-background p-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  New idea
+                </p>
+                <textarea
+                  value={newIdea}
+                  onChange={(event) => setNewIdea(event.target.value)}
+                  placeholder="Add a content idea"
+                  className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+                <div className="rounded-[1rem] bg-secondary p-3">
+                  <div className="flex items-center justify-between gap-3">
                     <p className="text-xs font-semibold text-primary">Generated post draft</p>
-                    <p className="mt-2 text-sm leading-relaxed text-foreground">
-                      {buildPostDraft(newIdea.trim() || "your idea will shape a calm, useful post here.").caption}
-                    </p>
-                    <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                      {buildPostDraft(newIdea.trim() || "").hashtags}
-                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setDraftSeed((s) => s + 1)}
+                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
+                    >
+                      Generate new
+                    </button>
                   </div>
-                </article>
-
+                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                    {previewDraft.caption}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {previewDraft.hashtags}
+                  </p>
+                </div>
                 <button
                   className="w-full rounded-[1rem] bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20 disabled:opacity-50 disabled:hover:scale-100"
                   type="button"
@@ -678,7 +690,7 @@ function Index() {
                 >
                   Save idea
                 </button>
-              </section>
+              </article>
 
               <section
                 className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
@@ -691,32 +703,33 @@ function Index() {
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <div className="space-y-2.5">
+                <ul className="divide-y divide-border overflow-hidden rounded-[1rem] border border-border bg-background">
                   {ideas.map((idea) => (
-                    <button
-                      key={idea.id}
-                      className="flex w-full items-start justify-between gap-3 rounded-[1rem] border border-border bg-background px-3 py-3 text-left transition duration-500 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
-                      type="button"
-                      onClick={() => setViewingIdeaId(idea.id)}
-                    >
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm leading-relaxed text-foreground">
+                    <li key={idea.id}>
+                      <button
+                        className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition hover:bg-card focus:outline-none focus:bg-card"
+                        type="button"
+                        onClick={() => setViewingIdeaId(idea.id)}
+                      >
+                        <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-relaxed text-foreground">
                           {idea.text}
                         </span>
-                        <span className="mt-1 block text-[11px] text-muted-foreground">
+                        <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-primary">
                           {idea.status}
                         </span>
-                      </span>
-                      <ChevronRight
-                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
-                        aria-hidden="true"
-                      />
-                    </button>
+                        <ChevronRight
+                          className="h-4 w-4 shrink-0 text-primary"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </section>
             </section>
           )}
+
+
 
           {activeTab === "Ideas" && viewingIdea && (
             <section className="slow-rise space-y-5" aria-label="Idea detail">
