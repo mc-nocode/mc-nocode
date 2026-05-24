@@ -113,6 +113,23 @@ function Index() {
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
+  const [draftSeed, setDraftSeed] = useState(0);
+
+  const draftVariants = [
+    (idea: string) => `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
+    (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
+    (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
+  ];
+  const hashtagVariants = [
+    "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
+    "#creativeprocess #behindthescenes #makersgonnamake #quietcreative #mori",
+    "#dailycreative #studiolife #intentionalcontent #craftovercontent #mori",
+  ];
+  const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
+  const previewDraft = {
+    caption: draftVariants[draftSeed % draftVariants.length](previewIdeaText),
+    hashtags: hashtagVariants[draftSeed % hashtagVariants.length],
+  };
 
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
