@@ -691,13 +691,19 @@ function Index() {
                       onClick={() => {
                         const text = previewDraft.caption;
                         const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
-                        setRecentFiles((current) => [
-                          { title, meta: "Draft · just now", status: "Draft", icon: PenLine },
-                          ...current,
-                        ]);
+                        const newDraft: Draft = {
+                          title,
+                          time: "just now",
+                          image: moriPhoto,
+                          note: text,
+                          favorite: false,
+                          featured: false,
+                        };
+                        setDrafts((current) => [newDraft, ...current]);
                         setNewIdea("");
                         setDraftSeed((s) => s + 1);
                         setActiveTab("Home");
+                        setSelectedDraftTitle(title);
                       }}
                       className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
                     >
