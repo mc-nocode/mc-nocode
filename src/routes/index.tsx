@@ -681,6 +681,17 @@ function Index() {
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                     {previewDraft.hashtags}
                   </p>
+                  <div className="mt-2 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewIdea(`${previewDraft.caption}\n\n${previewDraft.hashtags}`)
+                      }
+                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
+                    >
+                      Use the idea
+                    </button>
+                  </div>
                 </div>
                 <button
                   className="w-full rounded-[1rem] bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20 disabled:opacity-50 disabled:hover:scale-100"
