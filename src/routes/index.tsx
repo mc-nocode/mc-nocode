@@ -120,15 +120,10 @@ function Index() {
     (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
     (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
   ];
-  const hashtagVariants = [
-    "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
-    "#creativeprocess #behindthescenes #makersgonnamake #quietcreative #mori",
-    "#dailycreative #studiolife #intentionalcontent #craftovercontent #mori",
-  ];
   const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
+  const rawCaption = draftVariants[draftSeed % draftVariants.length](previewIdeaText);
   const previewDraft = {
-    caption: draftVariants[draftSeed % draftVariants.length](previewIdeaText),
-    hashtags: hashtagVariants[draftSeed % hashtagVariants.length],
+    caption: rawCaption.length > 180 ? rawCaption.slice(0, 177) + "…" : rawCaption,
   };
 
 
@@ -678,15 +673,10 @@ function Index() {
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    {previewDraft.hashtags}
-                  </p>
                   <div className="mt-2 flex justify-end">
                     <button
                       type="button"
-                      onClick={() =>
-                        setNewIdea(`${previewDraft.caption}\n\n${previewDraft.hashtags}`)
-                      }
+                      onClick={() => setNewIdea(previewDraft.caption)}
                       className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
                     >
                       Use the idea
