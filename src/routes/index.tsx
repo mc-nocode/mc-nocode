@@ -416,54 +416,8 @@ function Index() {
 
           {activeTab === "Home" && !selectedDraft && (
             <>
-              <section className="slow-rise space-y-3 [animation-delay:80ms]" aria-label="Favorites">
-                <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Keep going</p>
-                  <button className="text-xs font-medium text-primary" type="button">
-                    View all
-                  </button>
-                </div>
-                <div className="grid grid-cols-3 gap-2.5">
-                  {drafts.filter((d) => d.favorite).map((draft) => (
-                    <button
-                      key={draft.title}
-                      className="quiet-card relative overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
-                      type="button"
-                      onClick={() => setSelectedDraftTitle(draft.title)}
-                    >
-                      <img
-                        src={draft.image}
-                        alt={`${draft.title} draft`}
-                        width={320}
-                        height={240}
-                        className="aspect-square w-full object-cover"
-                      />
-                      {(draft.favorite || draft.featured) && (
-                        <div className="absolute right-2 top-2 flex gap-1">
-                          {draft.favorite && (
-                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
-                          )}
-                          {draft.featured && (
-                            <Bookmark className="h-3.5 w-3.5 fill-primary text-primary" aria-hidden="true" />
-                          )}
-                        </div>
-                      )}
-                      <span className="block p-2.5">
-                        <span className="block truncate text-xs font-semibold text-foreground">
-                          {draft.title}
-                        </span>
-                        <span className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
-                          <Clock3 className="h-3 w-3" aria-hidden="true" />
-                          <span className="truncate">{draft.time}</span>
-                        </span>
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
               <section
-                className="slow-rise space-y-4 [animation-delay:150ms]"
+                className="slow-rise space-y-4 [animation-delay:80ms]"
                 aria-label="Featured draft"
               >
                 <div className="flex items-center justify-between px-1">
@@ -515,6 +469,52 @@ function Index() {
                     </div>
                   </div>
                 </article>
+              </section>
+
+              <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Favorites">
+                <div className="flex items-center justify-between px-1">
+                  <p className="text-sm font-medium text-ink-soft">Keep going</p>
+                  <button className="text-xs font-medium text-primary" type="button">
+                    View all
+                  </button>
+                </div>
+                <div className="grid grid-cols-3 gap-2.5">
+                  {drafts.filter((d) => d.favorite).map((draft) => (
+                    <button
+                      key={draft.title}
+                      className="quiet-card relative overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      type="button"
+                      onClick={() => setSelectedDraftTitle(draft.title)}
+                    >
+                      <img
+                        src={draft.image}
+                        alt={`${draft.title} draft`}
+                        width={320}
+                        height={240}
+                        className="aspect-square w-full object-cover"
+                      />
+                      {(draft.favorite || draft.featured) && (
+                        <div className="absolute right-2 top-2 flex gap-1">
+                          {draft.favorite && (
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+                          )}
+                          {draft.featured && (
+                            <Bookmark className="h-3.5 w-3.5 fill-primary text-primary" aria-hidden="true" />
+                          )}
+                        </div>
+                      )}
+                      <span className="block p-2.5">
+                        <span className="block truncate text-xs font-semibold text-foreground">
+                          {draft.title}
+                        </span>
+                        <span className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
+                          <Clock3 className="h-3 w-3" aria-hidden="true" />
+                          <span className="truncate">{draft.time}</span>
+                        </span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </section>
 
               <section
