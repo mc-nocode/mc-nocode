@@ -387,9 +387,23 @@ function Index() {
                 />
               </div>
 
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                <Clock3 className="h-3 w-3" aria-hidden="true" />
-                <span>Last edited {selectedDraft.time}</span>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                  <Clock3 className="h-3 w-3" aria-hidden="true" />
+                  <span>Last edited {selectedDraft.time}</span>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Delete draft"
+                  onClick={() => {
+                    const title = selectedDraft.title;
+                    setSelectedDraftTitle(null);
+                    setDrafts((current) => current.filter((d) => d.title !== title));
+                  }}
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-ring/30"
+                >
+                  <Trash2 className="h-4 w-4" aria-hidden="true" />
+                </button>
               </div>
 
               {isDirty && (
