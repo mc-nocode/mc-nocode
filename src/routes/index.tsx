@@ -717,12 +717,12 @@ function Index() {
 
               <section
                 className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                aria-label="Content ideas"
+                aria-label="Ideas list"
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                    <p className="text-sm font-medium text-ink-soft">Content ideas</p>
+                    <p className="text-sm font-medium text-ink-soft">Ideas List</p>
                   </div>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
