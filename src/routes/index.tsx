@@ -673,13 +673,35 @@ function Index() {
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <div className="mt-2 flex justify-end">
+                  <div className="mt-2 flex justify-end gap-4">
                     <button
                       type="button"
-                      onClick={() => setNewIdea(previewDraft.caption)}
+                      onClick={() => {
+                        const text = previewDraft.caption;
+                        setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
+                        setNewIdea("");
+                        setDraftSeed((s) => s + 1);
+                      }}
                       className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
                     >
-                      Use the idea
+                      Add to List
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const text = previewDraft.caption;
+                        const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
+                        setRecentFiles((current) => [
+                          { title, meta: "Draft · just now", status: "Draft", icon: PenLine },
+                          ...current,
+                        ]);
+                        setNewIdea("");
+                        setDraftSeed((s) => s + 1);
+                        setActiveTab("Home");
+                      }}
+                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
+                    >
+                      Use in Draft
                     </button>
                   </div>
                 </div>
