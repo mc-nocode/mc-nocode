@@ -45,6 +45,12 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Mori — Photo Reflection App" },
+      { name: "description", content: "Mori helps aspiring content creators organize ideas, draft posts, and manage media." },
+      { property: "og:description", content: "Mori helps aspiring content creators organize ideas, draft posts, and manage media." },
+      { name: "twitter:description", content: "Mori helps aspiring content creators organize ideas, draft posts, and manage media." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c4651217-c2f1-433a-a0b0-0b3eba0e95ac/id-preview-76406803--1cd70796-b2a4-40b5-8982-721e07a4ab5f.lovable.app-1779698756384.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c4651217-c2f1-433a-a0b0-0b3eba0e95ac/id-preview-76406803--1cd70796-b2a4-40b5-8982-721e07a4ab5f.lovable.app-1779698756384.png" },
     ],
     links: [
       {
