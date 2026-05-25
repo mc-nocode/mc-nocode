@@ -120,11 +120,6 @@ function Index() {
     (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
     (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
   ];
-  const hashtagVariants = [
-    "#contentcreator #creatorroutine #slowcreative #visualstorytelling #mori",
-    "#creativeprocess #behindthescenes #makersgonnamake #quietcreative #mori",
-    "#dailycreative #studiolife #intentionalcontent #craftovercontent #mori",
-  ];
   const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
   const rawCaption = draftVariants[draftSeed % draftVariants.length](previewIdeaText);
   const previewDraft = {
