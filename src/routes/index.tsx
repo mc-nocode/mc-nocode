@@ -126,9 +126,9 @@ function Index() {
     "#dailycreative #studiolife #intentionalcontent #craftovercontent #mori",
   ];
   const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
+  const rawCaption = draftVariants[draftSeed % draftVariants.length](previewIdeaText);
   const previewDraft = {
-    caption: draftVariants[draftSeed % draftVariants.length](previewIdeaText),
-    hashtags: hashtagVariants[draftSeed % hashtagVariants.length],
+    caption: rawCaption.length > 180 ? rawCaption.slice(0, 177) + "…" : rawCaption,
   };
 
 
@@ -678,15 +678,10 @@ function Index() {
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    {previewDraft.hashtags}
-                  </p>
                   <div className="mt-2 flex justify-end">
                     <button
                       type="button"
-                      onClick={() =>
-                        setNewIdea(`${previewDraft.caption}\n\n${previewDraft.hashtags}`)
-                      }
+                      onClick={() => setNewIdea(previewDraft.caption)}
                       className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
                     >
                       Use the idea
