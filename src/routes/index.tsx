@@ -99,6 +99,40 @@ function Index() {
   const [ideaPhotos, setIdeaPhotos] = useState<Record<number, string>>({});
   const [showLibraryPicker, setShowLibraryPicker] = useState(false);
   const [confirmCreateDraft, setConfirmCreateDraft] = useState(false);
+  const [recentVisibleCount, setRecentVisibleCount] = useState(3);
+
+  const openOrCreateDraftFromRecent = (title: string) => {
+    const existing = drafts.find((d) => d.title === title);
+    if (!existing) {
+      setDrafts((current) => [
+        { title, time: "just now", image: moriPhoto, note: "", favorite: false, featured: false },
+        ...current,
+      ]);
+    }
+    setSelectedDraftTitle(title);
+  };
+
+  const createNewDraft = () => {
+    const base = "Untitled draft";
+    let title = base;
+    let n = 2;
+    const titles = new Set(drafts.map((d) => d.title));
+    while (titles.has(title)) {
+      title = `${base} ${n++}`;
+    }
+    const draft: Draft = {
+      title,
+      time: "just now",
+      image: moriPhoto,
+      note: "",
+      favorite: false,
+      featured: false,
+    };
+    setDrafts((current) => [draft, ...current]);
+    setActiveTab("Home");
+    setSelectedDraftTitle(title);
+  };
+
 
   useEffect(() => {
     setDraftEdits(selectedDraft ? { ...selectedDraft } : null);
