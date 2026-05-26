@@ -336,10 +336,12 @@ function Index() {
             aria-label="Add"
             onClick={() => {
               if (activeTab === "Library") fileInputRef.current?.click();
+              else createNewDraft();
             }}
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
           </button>
+
         </header>
 
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
