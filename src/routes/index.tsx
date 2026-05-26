@@ -578,13 +578,14 @@ function Index() {
                   </button>
                 </div>
                 <div className="space-y-2.5">
-                  {recentFiles.map((file) => {
+                  {recentFiles.slice(0, recentVisibleCount).map((file) => {
                     const Icon = file.icon;
                     return (
                       <button
                         key={file.title}
                         className="quiet-card flex w-full items-center gap-3 rounded-[1.25rem] border border-border bg-surface p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
                         type="button"
+                        onClick={() => openOrCreateDraftFromRecent(file.title)}
                       >
                         <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] bg-secondary text-primary">
                           <Icon className="h-4 w-4" aria-hidden="true" />
@@ -603,7 +604,17 @@ function Index() {
                       </button>
                     );
                   })}
+                  {recentVisibleCount < recentFiles.length && (
+                    <button
+                      type="button"
+                      onClick={() => setRecentVisibleCount((c) => c + 10)}
+                      className="w-full rounded-[1rem] px-3 py-2 text-xs font-medium text-primary transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                    >
+                      See more
+                    </button>
+                  )}
                 </div>
+
               </section>
             </>
           )}
