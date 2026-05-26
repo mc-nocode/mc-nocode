@@ -199,6 +199,15 @@ function Index() {
       status: "Draft",
       icon: PenLine,
     };
+    const newDraft: Draft = {
+      title,
+      time: "just now",
+      image: ideaPhotos[idea.id] || moriPhoto,
+      note: idea.text,
+      favorite: false,
+      featured: false,
+    };
+    setDrafts((current) => [newDraft, ...current]);
     setRecentFiles((current) => [file, ...current]);
     setIdeas((current) => current.filter((i) => i.id !== idea.id));
     setIdeaPhotos((current) => {
@@ -208,6 +217,8 @@ function Index() {
     });
     setViewingIdeaId(null);
     setConfirmCreateDraft(false);
+    setActiveTab("Home");
+    setSelectedDraftTitle(title);
   };
 
 
