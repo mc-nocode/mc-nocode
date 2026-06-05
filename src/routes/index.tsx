@@ -20,6 +20,7 @@ import {
   Star,
   Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
 import {
   Dialog,
@@ -151,15 +152,31 @@ function Index() {
   const [newIdea, setNewIdea] = useState("");
   const [draftSeed, setDraftSeed] = useState(0);
 
-  const draftVariants = [
-    (idea: string) => `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
-    (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
-    (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
+  const ideaSeeds = [
+    "a quiet morning routine that shaped your creative practice",
+    "the small detail in your workspace that keeps you grounded",
+    "one habit that made sharing online feel less performative",
+    "a tiny win from this week worth celebrating",
+    "a reflection on slowing down in a fast-moving feed",
   ];
-  const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
-  const rawCaption = draftVariants[draftSeed % draftVariants.length](previewIdeaText);
+  const draftVariants = [
+    (idea: string) => `A small note from today's creative practice: ${idea}. Keeping it simple, honest, and useful for the people building at their own pace.`,
+    (idea: string) => `Here's something I've been sitting with: ${idea}. Sharing it in case it sparks a quieter, more intentional moment in your day.`,
+    (idea: string) => `Quick thought worth saving: ${idea}. A reminder that the slow, considered approach still has a place online.`,
+  ];
+  const seededIdea = ideaSeeds[draftSeed % ideaSeeds.length];
+  const rawCaption = draftVariants[draftSeed % draftVariants.length](seededIdea);
   const previewDraft = {
     caption: rawCaption.length > 180 ? rawCaption.slice(0, 177) + "…" : rawCaption,
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Idea copied to clipboard");
+    } catch {
+      toast.error("Couldn't copy idea");
+    }
   };
 
 
@@ -485,7 +502,17 @@ function Index() {
               >
                 <div className="flex items-center justify-between px-1">
                   <p className="text-sm font-medium text-ink-soft">Featured draft</p>
-                  <PenLine className="h-4 w-4 text-primary" aria-hidden="true" />
+                  <button
+                    type="button"
+                    aria-label="Edit featured draft"
+                    onClick={() => {
+                      const featured = drafts.find((d) => d.featured) ?? drafts[0];
+                      if (featured) setSelectedDraftTitle(featured.title);
+                    }}
+                    className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <PenLine className="h-4 w-4" aria-hidden="true" />
+                  </button>
                 </div>
                 <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
                   <div className="overflow-hidden rounded-[1.15rem] bg-linen">
@@ -507,7 +534,14 @@ function Index() {
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       A calm visual starting point for a thoughtful post, reel, or carousel. Natural light, soft textures, and a quiet moment that invites people to pause and look closer.
                     </p>
-                    <button className="mt-2 text-xs font-medium text-primary" type="button">
+                    <button
+                      className="mt-2 text-xs font-medium text-primary"
+                      type="button"
+                      onClick={() => {
+                        const featured = drafts.find((d) => d.featured) ?? drafts[0];
+                        if (featured) setSelectedDraftTitle(featured.title);
+                      }}
+                    >
                       See more
                     </button>
                     <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Featured draft choices">
@@ -737,7 +771,14 @@ function Index() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5">
                       <p className="text-xs font-semibold text-primary">Idea Generation</p>
-                      <Copy className="h-3 w-3 text-primary" aria-hidden="true" />
+                      <button
+                        type="button"
+                        aria-label="Copy generated idea"
+                        onClick={() => copyToClipboard(previewDraft.caption)}
+                        className="flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                      >
+                        <Copy className="h-3 w-3" aria-hidden="true" />
+                      </button>
                     </div>
                     <button
                       type="button"
@@ -899,7 +940,14 @@ function Index() {
                 <div className="rounded-[1rem] bg-secondary p-3">
                   <div className="flex items-center gap-1.5">
                     <p className="text-xs font-semibold text-primary">Idea Generation</p>
-                    <Copy className="h-3 w-3 text-primary" aria-hidden="true" />
+                    <button
+                      type="button"
+                      aria-label="Copy generated idea"
+                      onClick={() => copyToClipboard(`${generatedDraftForViewing.caption}\n\n${generatedDraftForViewing.hashtags}`)}
+                      className="flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                    >
+                      <Copy className="h-3 w-3" aria-hidden="true" />
+                    </button>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
                     {generatedDraftForViewing.caption}
