@@ -735,13 +735,17 @@ function Index() {
                 />
                 <div className="rounded-[1rem] bg-secondary p-3">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs font-semibold text-primary">Idea Generation</p>
+                      <Copy className="h-3 w-3 text-primary" aria-hidden="true" />
+                    </div>
                     <button
                       type="button"
+                      aria-label="Generate new"
                       onClick={() => setDraftSeed((s) => s + 1)}
-                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
                     >
-                      Generate new
+                      <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
