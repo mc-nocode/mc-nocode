@@ -754,7 +754,14 @@ function Index() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5">
                       <p className="text-xs font-semibold text-primary">Idea Generation</p>
-                      <Copy className="h-3 w-3 text-primary" aria-hidden="true" />
+                      <button
+                        type="button"
+                        aria-label="Copy generated idea"
+                        onClick={() => copyToClipboard(previewDraft.caption)}
+                        className="flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                      >
+                        <Copy className="h-3 w-3" aria-hidden="true" />
+                      </button>
                     </div>
                     <button
                       type="button"
