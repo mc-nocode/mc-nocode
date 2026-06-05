@@ -897,7 +897,10 @@ function Index() {
                   className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition focus:border-ring focus:ring-4 focus:ring-ring/15"
                 />
                 <div className="rounded-[1rem] bg-secondary p-3">
-                  <p className="text-xs font-semibold text-primary">Generated post draft</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-xs font-semibold text-primary">Idea Generation</p>
+                    <Copy className="h-3 w-3 text-primary" aria-hidden="true" />
+                  </div>
                   <p className="mt-2 text-sm leading-relaxed text-foreground">
                     {generatedDraftForViewing.caption}
                   </p>
