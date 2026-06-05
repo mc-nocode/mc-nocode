@@ -152,15 +152,31 @@ function Index() {
   const [newIdea, setNewIdea] = useState("");
   const [draftSeed, setDraftSeed] = useState(0);
 
-  const draftVariants = [
-    (idea: string) => `A small note from today's creative practice: ${idea} Keeping it simple, honest, and useful for the people building at their own pace.`,
-    (idea: string) => `Here's something I've been sitting with: ${idea} Sharing it in case it sparks a quieter, more intentional moment in your day.`,
-    (idea: string) => `Quick thought worth saving: ${idea} A reminder that the slow, considered approach still has a place online.`,
+  const ideaSeeds = [
+    "a quiet morning routine that shaped your creative practice",
+    "the small detail in your workspace that keeps you grounded",
+    "one habit that made sharing online feel less performative",
+    "a tiny win from this week worth celebrating",
+    "a reflection on slowing down in a fast-moving feed",
   ];
-  const previewIdeaText = newIdea.trim() || "your idea will shape a calm, useful post here.";
-  const rawCaption = draftVariants[draftSeed % draftVariants.length](previewIdeaText);
+  const draftVariants = [
+    (idea: string) => `A small note from today's creative practice: ${idea}. Keeping it simple, honest, and useful for the people building at their own pace.`,
+    (idea: string) => `Here's something I've been sitting with: ${idea}. Sharing it in case it sparks a quieter, more intentional moment in your day.`,
+    (idea: string) => `Quick thought worth saving: ${idea}. A reminder that the slow, considered approach still has a place online.`,
+  ];
+  const seededIdea = ideaSeeds[draftSeed % ideaSeeds.length];
+  const rawCaption = draftVariants[draftSeed % draftVariants.length](seededIdea);
   const previewDraft = {
     caption: rawCaption.length > 180 ? rawCaption.slice(0, 177) + "…" : rawCaption,
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Idea copied to clipboard");
+    } catch {
+      toast.error("Couldn't copy idea");
+    }
   };
 
 
