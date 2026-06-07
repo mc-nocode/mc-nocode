@@ -757,20 +757,78 @@ function Index() {
           )}
 
           {activeTab === "Ideas" && !viewingIdea && (
-            <section className="slow-rise space-y-4" aria-label="Ideas">
-              <article className="space-y-3 rounded-[1.25rem] border border-border bg-background p-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <section className="slow-rise space-y-6" aria-label="Ideas">
+              {/* For You — Trending Reels */}
+              <div className="space-y-2">
+                <p className="px-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                   For you
                 </p>
-                <div className="rounded-[1rem] bg-secondary p-3">
+                <article
+                  className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
+                  aria-label="Trending reels"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <Film className="h-4 w-4 text-primary" aria-hidden="true" />
+                      <p className="text-sm font-medium text-ink-soft">Trending reels</p>
+                    </div>
+                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      Updated today
+                    </span>
+                  </div>
+                  <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
+                    {[
+                      { title: "Slow morning rituals", views: "2.1M" },
+                      { title: "Quiet desk reset", views: "874K" },
+                      { title: "Linen & light", views: "1.4M" },
+                      { title: "Notes by the window", views: "512K" },
+                    ].map((reel) => (
+                      <button
+                        key={reel.title}
+                        type="button"
+                        className="group relative shrink-0 overflow-hidden rounded-[1rem] border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-soft focus:outline-none focus:ring-2 focus:ring-ring/30"
+                        style={{ width: "9rem" }}
+                      >
+                        <div className="relative aspect-[9/14] w-full overflow-hidden">
+                          <img
+                            src={moriPhoto}
+                            alt=""
+                            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-foreground/55 via-transparent to-transparent" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 text-primary shadow-soft backdrop-blur">
+                              <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+                            </span>
+                          </div>
+                          <div className="absolute bottom-0 left-0 right-0 space-y-0.5 p-2 text-background">
+                            <p className="text-[11px] font-semibold leading-tight line-clamp-2">
+                              {reel.title}
+                            </p>
+                            <p className="text-[10px] opacity-80">{reel.views} views</p>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </article>
+              </div>
+
+              {/* Idea Generation */}
+              <div className="space-y-2">
+                <p className="px-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  Idea Generation
+                </p>
+                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5">
-                      <p className="text-xs font-semibold text-primary">Idea Generation</p>
+                      <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
+                      <p className="text-sm font-medium text-ink-soft">Suggested idea</p>
                       <button
                         type="button"
                         aria-label="Copy generated idea"
                         onClick={() => copyToClipboard(previewDraft.caption)}
-                        className="flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                        className="ml-1 flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
                       >
                         <Copy className="h-3 w-3" aria-hidden="true" />
                       </button>
@@ -784,10 +842,10 @@ function Index() {
                       <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-foreground">
+                  <p className="text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <div className="mt-2 flex justify-end gap-4">
+                  <div className="flex justify-end gap-4">
                     <button
                       type="button"
                       onClick={() => {
@@ -824,7 +882,7 @@ function Index() {
                       Use in Draft
                     </button>
                   </div>
-                  <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Idea actions">
+                  <div className="grid grid-cols-3 gap-2" aria-label="Idea actions">
                     {actions.map((action) => {
                       const Icon = action.icon;
                       return (
@@ -844,45 +902,48 @@ function Index() {
                       );
                     })}
                   </div>
-                </div>
-              </article>
+                </article>
+              </div>
 
-              <section
-                className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                aria-label="Ideas list"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                    <p className="text-sm font-medium text-ink-soft">Ideas List</p>
-                  </div>
+              {/* Ideas List */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-3 px-1">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    Ideas list
+                  </p>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
                 </div>
-                <ul className="divide-y divide-border overflow-hidden rounded-[1rem] border border-border bg-background">
-                  {ideas.map((idea) => (
-                    <li key={idea.id}>
-                      <button
-                        className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition hover:bg-card focus:outline-none focus:bg-card"
-                        type="button"
-                        onClick={() => setViewingIdeaId(idea.id)}
-                      >
-                        <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-relaxed text-foreground">
-                          {idea.text}
-                        </span>
-                        <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-primary">
-                          {idea.status}
-                        </span>
-                        <ChevronRight
-                          className="h-4 w-4 shrink-0 text-primary"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+                <section
+                  className="rounded-[1.45rem] border border-border bg-surface p-2 shadow-soft"
+                  aria-label="Ideas list"
+                >
+                  <ul className="divide-y divide-border overflow-hidden rounded-[1rem] bg-background">
+                    {ideas.map((idea) => (
+                      <li key={idea.id}>
+                        <button
+                          className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition hover:bg-card focus:outline-none focus:bg-card"
+                          type="button"
+                          onClick={() => setViewingIdeaId(idea.id)}
+                        >
+                          <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-relaxed text-foreground">
+                            {idea.text}
+                          </span>
+                          <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-primary">
+                            {idea.status}
+                          </span>
+                          <ChevronRight
+                            className="h-4 w-4 shrink-0 text-primary"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
             </section>
           )}
+
 
 
 
