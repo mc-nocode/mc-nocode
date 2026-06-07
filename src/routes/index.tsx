@@ -19,6 +19,7 @@ import {
   Search,
   Star,
   Trash2,
+  Play,
 } from "lucide-react";
 import { toast } from "sonner";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
