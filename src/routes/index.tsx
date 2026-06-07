@@ -759,14 +759,8 @@ function Index() {
             <section className="slow-rise space-y-4" aria-label="Ideas">
               <article className="space-y-3 rounded-[1.25rem] border border-border bg-background p-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                  New idea
+                  For you
                 </p>
-                <textarea
-                  value={newIdea}
-                  onChange={(event) => setNewIdea(event.target.value)}
-                  placeholder="Add a content idea"
-                  className="min-h-24 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                />
                 <div className="rounded-[1rem] bg-secondary p-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-1.5">
@@ -829,15 +823,27 @@ function Index() {
                       Use in Draft
                     </button>
                   </div>
+                  <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Idea actions">
+                    {actions.map((action) => {
+                      const Icon = action.icon;
+                      return (
+                        <button
+                          key={action.label}
+                          className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-background px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          type="button"
+                        >
+                          <Icon className="mb-2 h-4 w-4 text-primary" aria-hidden="true" />
+                          <span className="text-xs font-semibold text-foreground">
+                            {action.label}
+                          </span>
+                          <span className="mt-0.5 text-[10px] leading-snug text-muted-foreground">
+                            {action.detail}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <button
-                  className="w-full rounded-[1rem] bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition duration-500 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20 disabled:opacity-50 disabled:hover:scale-100"
-                  type="button"
-                  onClick={addIdea}
-                  disabled={!newIdea.trim()}
-                >
-                  Save idea
-                </button>
               </article>
 
               <section
