@@ -42,6 +42,12 @@ const actions = [
   { label: "Reflect", detail: "Find angle", icon: PenLine },
 ];
 
+const ideaActions = [
+  { label: "Add to List", detail: "Save idea", icon: Lock },
+  { label: "Not this", detail: "Skip it", icon: Archive },
+  { label: "Use in Draft", detail: "Create draft", icon: PenLine },
+];
+
 const initialRecentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
   {
