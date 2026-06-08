@@ -72,7 +72,7 @@ const initialDrafts: Draft[] = [
 const initialContentIdeas = [
   { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel.", status: "Idea" },
   { id: 2, text: "Write a carousel about building a slower creative routine.", status: "Planned" },
-  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "Done" },
+  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "Up Next" },
 ];
 
 type ContentIdea = (typeof initialContentIdeas)[number];
@@ -741,7 +741,7 @@ function Index() {
             <section className="slow-rise space-y-6" aria-label="Ideas">
               {/* For You — Trending Reels */}
               <div className="space-y-2">
-                <p className="px-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="px-1 text-sm font-medium text-ink-soft">
                   For you
                 </p>
                 <article
@@ -797,7 +797,7 @@ function Index() {
 
               {/* Idea Generation */}
               <div className="space-y-2">
-                <p className="px-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="px-1 text-sm font-medium text-ink-soft">
                   Idea Generation
                 </p>
                 <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
@@ -876,7 +876,7 @@ function Index() {
               {/* Ideas List */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-3 px-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  <p className="text-sm font-medium text-ink-soft">
                     Ideas list
                   </p>
                   <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
@@ -934,7 +934,7 @@ function Index() {
                   </p>
                   <div className="flex items-center gap-1.5">
                     <div className="flex gap-1.5">
-                      {["Planned", "Done"].map((status) => (
+                      {["Planned", "Up Next"].map((status) => (
                         <button
                           key={status}
                           className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
@@ -998,7 +998,7 @@ function Index() {
                 <button
                   type="button"
                   onClick={() => setShowLibraryPicker(true)}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-secondary px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-background px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                 >
                   <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
                   {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from Library"}
