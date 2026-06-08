@@ -36,11 +36,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const actions = [
-  { label: "Keep", detail: "Use soon", icon: Lock },
-  { label: "Archive", detail: "Save later", icon: Archive },
-  { label: "Reflect", detail: "Find angle", icon: PenLine },
-];
 
 const ideaActions = [
   { label: "Add to List", detail: "Save idea", icon: Lock },
@@ -551,26 +546,6 @@ function Index() {
                     >
                       See more
                     </button>
-                    <div className="mt-4 grid grid-cols-3 gap-2" aria-label="Featured draft choices">
-                      {actions.map((action) => {
-                        const Icon = action.icon;
-                        return (
-                          <button
-                            key={action.label}
-                            className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-secondary px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
-                            type="button"
-                          >
-                            <Icon className="mb-2 h-4 w-4 text-primary" aria-hidden="true" />
-                            <span className="text-xs font-semibold text-foreground">
-                              {action.label}
-                            </span>
-                            <span className="mt-0.5 text-[10px] leading-snug text-muted-foreground">
-                              {action.detail}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
                   </div>
                 </article>
               </section>
