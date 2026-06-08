@@ -42,6 +42,12 @@ const actions = [
   { label: "Reflect", detail: "Find angle", icon: PenLine },
 ];
 
+const ideaActions = [
+  { label: "Add to List", detail: "Save idea", icon: Lock },
+  { label: "Not this", detail: "Skip it", icon: Archive },
+  { label: "Use in Draft", detail: "Create draft", icon: PenLine },
+];
+
 const initialRecentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
   {
@@ -845,51 +851,38 @@ function Index() {
                   <p className="text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <div className="flex justify-end gap-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const text = previewDraft.caption;
-                        setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
-                        setNewIdea("");
-                        setDraftSeed((s) => s + 1);
-                      }}
-                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
-                    >
-                      Add to List
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const text = previewDraft.caption;
-                        const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
-                        const newDraft: Draft = {
-                          title,
-                          time: "just now",
-                          image: moriPhoto,
-                          note: text,
-                          favorite: false,
-                          featured: false,
-                        };
-                        setDrafts((current) => [newDraft, ...current]);
-                        setNewIdea("");
-                        setDraftSeed((s) => s + 1);
-                        setActiveTab("Home");
-                        setSelectedDraftTitle(title);
-                      }}
-                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline focus:outline-none focus:ring-2 focus:ring-ring/30 rounded"
-                    >
-                      Use in Draft
-                    </button>
-                  </div>
                   <div className="grid grid-cols-3 gap-2" aria-label="Idea actions">
-                    {actions.map((action) => {
+                    {ideaActions.map((action) => {
                       const Icon = action.icon;
                       return (
                         <button
                           key={action.label}
-                          className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-background px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-secondary px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
+                          onClick={() => {
+                            if (action.label === "Add to List") {
+                              const text = previewDraft.caption;
+                              setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
+                              setDraftSeed((s) => s + 1);
+                            } else if (action.label === "Not this") {
+                              setDraftSeed((s) => s + 1);
+                            } else if (action.label === "Use in Draft") {
+                              const text = previewDraft.caption;
+                              const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
+                              const newDraft: Draft = {
+                                title,
+                                time: "just now",
+                                image: moriPhoto,
+                                note: text,
+                                favorite: false,
+                                featured: false,
+                              };
+                              setDrafts((current) => [newDraft, ...current]);
+                              setDraftSeed((s) => s + 1);
+                              setActiveTab("Home");
+                              setSelectedDraftTitle(title);
+                            }
+                          }}
                         >
                           <Icon className="mb-2 h-4 w-4 text-primary" aria-hidden="true" />
                           <span className="text-xs font-semibold text-foreground">
