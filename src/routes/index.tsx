@@ -36,11 +36,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const actions = [
-  { label: "Keep", detail: "Use soon", icon: Lock },
-  { label: "Archive", detail: "Save later", icon: Archive },
-  { label: "Reflect", detail: "Find angle", icon: PenLine },
-];
 
 const ideaActions = [
   { label: "Add to List", detail: "Save idea", icon: Lock },
