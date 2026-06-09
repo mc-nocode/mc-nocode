@@ -38,10 +38,12 @@ export const Route = createFileRoute("/")({
 
 
 const ideaActions = [
-  { label: "Add to List", detail: "Save idea", icon: Lock },
+  { label: "Add to list", detail: "Save idea", icon: Lock },
   { label: "Not this", detail: "Skip it", icon: Archive },
-  { label: "Use in Draft", detail: "Create draft", icon: PenLine },
+  { label: "Use in draft", detail: "Create draft", icon: PenLine },
 ];
+
+const MAX_DRAFT_PHOTOS = 8;
 
 const initialRecentFiles = [
   { title: "Morning reel cover", meta: "Photo · added today", status: "Private", icon: FileImage },
@@ -57,16 +59,16 @@ const initialRecentFiles = [
 type Draft = {
   title: string;
   time: string;
-  image: string;
+  photos: string[];
   note: string;
   favorite: boolean;
   featured: boolean;
 };
 
 const initialDrafts: Draft[] = [
-  { title: "Kitchen light", time: "12 min ago", image: moriPhoto, note: "", favorite: false, featured: false },
-  { title: "Window notes", time: "Yesterday", image: moriPhoto, note: "", favorite: false, featured: true },
-  { title: "Before archive", time: "2 days ago", image: moriPhoto, note: "", favorite: true, featured: false },
+  { title: "Kitchen light", time: "12 min ago", photos: [moriPhoto], note: "", favorite: false, featured: false },
+  { title: "Window notes", time: "Yesterday", photos: [moriPhoto], note: "", favorite: false, featured: true },
+  { title: "Before archive", time: "2 days ago", photos: [moriPhoto], note: "", favorite: true, featured: false },
 ];
 
 const initialContentIdeas = [
@@ -110,7 +112,7 @@ function Index() {
     const existing = drafts.find((d) => d.title === title);
     if (!existing) {
       setDrafts((current) => [
-        { title, time: "just now", image: moriPhoto, note: "", favorite: false, featured: false },
+        { title, time: "just now", photos: [], note: "", favorite: false, featured: false },
         ...current,
       ]);
     }
@@ -128,7 +130,7 @@ function Index() {
     const draft: Draft = {
       title,
       time: "just now",
-      image: moriPhoto,
+      photos: [],
       note: "",
       favorite: false,
       featured: false,
@@ -184,6 +186,41 @@ function Index() {
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const draftPhotoInputRef = useRef<HTMLInputElement | null>(null);
+  const [managePhotosOpen, setManagePhotosOpen] = useState(false);
+
+  const addPhotosToDraft = (files: FileList | null) => {
+    if (!files || !selectedDraft) return;
+    const urls: string[] = [];
+    Array.from(files).forEach((file) => {
+      if (file.type.startsWith("image/")) urls.push(URL.createObjectURL(file));
+    });
+    if (!urls.length) return;
+    setDrafts((current) =>
+      current.map((d) =>
+        d.title === selectedDraft.title
+          ? { ...d, photos: [...d.photos, ...urls].slice(0, MAX_DRAFT_PHOTOS) }
+          : d,
+      ),
+    );
+    setDraftEdits((d) =>
+      d ? { ...d, photos: [...d.photos, ...urls].slice(0, MAX_DRAFT_PHOTOS) } : d,
+    );
+  };
+
+  const removeDraftPhoto = (index: number) => {
+    if (!selectedDraft) return;
+    setDrafts((current) =>
+      current.map((d) =>
+        d.title === selectedDraft.title
+          ? { ...d, photos: d.photos.filter((_, i) => i !== index) }
+          : d,
+      ),
+    );
+    setDraftEdits((d) =>
+      d ? { ...d, photos: d.photos.filter((_, i) => i !== index) } : d,
+    );
+  };
 
   const addIdea = () => {
     const text = newIdea.trim();
@@ -223,7 +260,7 @@ function Index() {
     const newDraft: Draft = {
       title,
       time: "just now",
-      image: ideaPhotos[idea.id] || moriPhoto,
+      photos: ideaPhotos[idea.id] ? [ideaPhotos[idea.id]] : [],
       note: idea.text,
       favorite: false,
       featured: false,
@@ -331,7 +368,7 @@ function Index() {
     : viewingIdea && activeTab === "Ideas"
       ? "Idea"
       : activeTab === "Home"
-        ? "Creator Space"
+        ? "Creator space"
         : activeTab === "Library"
           ? "Library"
           : "Ideas";
@@ -379,15 +416,63 @@ function Index() {
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
           {activeTab === "Home" && selectedDraft && draftEdits && (
             <section className="slow-rise space-y-5" aria-label="Draft detail">
-              <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
-                <img
-                  src={selectedDraft.image}
-                  alt={`${selectedDraft.title} draft`}
-                  width={320}
-                  height={320}
-                  className="aspect-square w-full object-cover"
-                />
-              </div>
+              <input
+                ref={draftPhotoInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  addPhotosToDraft(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              {selectedDraft.photos.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => draftPhotoInputRef.current?.click()}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-border bg-surface p-10 text-center transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary">
+                    <ImagePlus className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">Add photos</span>
+                  <span className="text-xs text-muted-foreground">
+                    Up to {MAX_DRAFT_PHOTOS} photos from your device
+                  </span>
+                </button>
+              ) : (
+                <div className="relative">
+                  <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
+                    {selectedDraft.photos.length === 1 ? (
+                      <img
+                        src={selectedDraft.photos[0]}
+                        alt={`${selectedDraft.title} draft`}
+                        className="aspect-square w-full object-cover"
+                      />
+                    ) : (
+                      <div className="grid grid-cols-2 gap-1 p-1">
+                        {selectedDraft.photos.map((src, i) => (
+                          <img
+                            key={i}
+                            src={src}
+                            alt={`${selectedDraft.title} photo ${i + 1}`}
+                            className="aspect-square w-full rounded-[0.85rem] object-cover"
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setManagePhotosOpen(true)}
+                    aria-label="Edit photos"
+                    className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft transition hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+                  >
+                    <PenLine className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground" htmlFor="draft-title">
@@ -420,7 +505,7 @@ function Index() {
                     className={`h-3.5 w-3.5 ${draftEdits.favorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`}
                     aria-hidden="true"
                   />
-                  {draftEdits.favorite ? "Favorited" : "Mark Favorite"}
+                  {draftEdits.favorite ? "Favorited" : "Mark favorite"}
                 </button>
                 <button
                   type="button"
@@ -437,7 +522,7 @@ function Index() {
                     className={`h-3.5 w-3.5 ${draftEdits.featured ? "fill-primary text-primary" : ""}`}
                     aria-hidden="true"
                   />
-                  {draftEdits.featured ? "Featured" : "Mark Featured"}
+                  {draftEdits.featured ? "Featured" : "Mark featured"}
                 </button>
               </div>
 
@@ -566,7 +651,7 @@ function Index() {
                       onClick={() => setSelectedDraftTitle(draft.title)}
                     >
                       <img
-                        src={draft.image}
+                        src={draft.photos[0] ?? moriPhoto}
                         alt={`${draft.title} draft`}
                         width={320}
                         height={240}
@@ -795,10 +880,10 @@ function Index() {
                 </article>
               </div>
 
-              {/* Idea Generation */}
+              {/* Idea generation */}
               <div className="space-y-2">
                 <p className="px-1 text-sm font-medium text-ink-soft">
-                  Idea Generation
+                  Idea generation
                 </p>
                 <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
                   <div className="flex items-center justify-between gap-3">
@@ -835,19 +920,19 @@ function Index() {
                           className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-secondary px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
-                            if (action.label === "Add to List") {
+                            if (action.label === "Add to list") {
                               const text = previewDraft.caption;
                               setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
                               setDraftSeed((s) => s + 1);
                             } else if (action.label === "Not this") {
                               setDraftSeed((s) => s + 1);
-                            } else if (action.label === "Use in Draft") {
+                            } else if (action.label === "Use in draft") {
                               const text = previewDraft.caption;
                               const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
                               const newDraft: Draft = {
                                 title,
                                 time: "just now",
-                                image: moriPhoto,
+                                photos: [moriPhoto],
                                 note: text,
                                 favorite: false,
                                 featured: false,
@@ -975,7 +1060,7 @@ function Index() {
                 />
                 <div className="rounded-[1rem] bg-secondary p-3">
                   <div className="flex items-center gap-1.5">
-                    <p className="text-xs font-semibold text-primary">Idea Generation</p>
+                    <p className="text-xs font-semibold text-primary">Idea generation</p>
                     <button
                       type="button"
                       aria-label="Copy generated idea"
@@ -1001,7 +1086,7 @@ function Index() {
                   className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-background px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                 >
                   <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
-                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from Library"}
+                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from library"}
                 </button>
                 <button
                   type="button"
@@ -1009,7 +1094,7 @@ function Index() {
                   className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20"
                 >
                   <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
-                  Create Draft
+                  Create draft
                 </button>
               </div>
             </section>
@@ -1077,7 +1162,7 @@ function Index() {
       <Dialog open={showLibraryPicker} onOpenChange={setShowLibraryPicker}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add a photo from Library</DialogTitle>
+            <DialogTitle>Add a photo from library</DialogTitle>
             <DialogDescription>
               Pick a photo or video already in your library to attach to this idea.
             </DialogDescription>
@@ -1129,6 +1214,51 @@ function Index() {
               className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
             >
               Create draft
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={managePhotosOpen} onOpenChange={setManagePhotosOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Manage photos</DialogTitle>
+            <DialogDescription>
+              {selectedDraft?.photos.length ?? 0} of {MAX_DRAFT_PHOTOS} photos. Add more or remove what you don't need.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDraft && selectedDraft.photos.length > 0 && (
+            <div className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto">
+              {selectedDraft.photos.map((src, i) => (
+                <div key={i} className="relative overflow-hidden rounded-[0.85rem] border border-border bg-card">
+                  <img src={src} alt={`Photo ${i + 1}`} className="aspect-square w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeDraftPhoto(i)}
+                    aria-label={`Remove photo ${i + 1}`}
+                    className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-background/90 text-destructive shadow-soft transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setManagePhotosOpen(false)}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Done
+            </button>
+            <button
+              type="button"
+              disabled={(selectedDraft?.photos.length ?? 0) >= MAX_DRAFT_PHOTOS}
+              onClick={() => draftPhotoInputRef.current?.click()}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-50"
+            >
+              Add more
             </button>
           </DialogFooter>
         </DialogContent>
