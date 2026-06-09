@@ -57,16 +57,18 @@ const initialRecentFiles = [
 type Draft = {
   title: string;
   time: string;
-  image: string;
+  photos: string[];
   note: string;
   favorite: boolean;
   featured: boolean;
 };
 
+const MAX_DRAFT_PHOTOS = 8;
+
 const initialDrafts: Draft[] = [
-  { title: "Kitchen light", time: "12 min ago", image: moriPhoto, note: "", favorite: false, featured: false },
-  { title: "Window notes", time: "Yesterday", image: moriPhoto, note: "", favorite: false, featured: true },
-  { title: "Before archive", time: "2 days ago", image: moriPhoto, note: "", favorite: true, featured: false },
+  { title: "Kitchen light", time: "12 min ago", photos: [moriPhoto], note: "", favorite: false, featured: false },
+  { title: "Window notes", time: "Yesterday", photos: [moriPhoto], note: "", favorite: false, featured: true },
+  { title: "Before archive", time: "2 days ago", photos: [moriPhoto], note: "", favorite: true, featured: false },
 ];
 
 const initialContentIdeas = [
