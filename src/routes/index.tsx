@@ -186,6 +186,41 @@ function Index() {
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const draftPhotoInputRef = useRef<HTMLInputElement | null>(null);
+  const [managePhotosOpen, setManagePhotosOpen] = useState(false);
+
+  const addPhotosToDraft = (files: FileList | null) => {
+    if (!files || !selectedDraft) return;
+    const urls: string[] = [];
+    Array.from(files).forEach((file) => {
+      if (file.type.startsWith("image/")) urls.push(URL.createObjectURL(file));
+    });
+    if (!urls.length) return;
+    setDrafts((current) =>
+      current.map((d) =>
+        d.title === selectedDraft.title
+          ? { ...d, photos: [...d.photos, ...urls].slice(0, MAX_DRAFT_PHOTOS) }
+          : d,
+      ),
+    );
+    setDraftEdits((d) =>
+      d ? { ...d, photos: [...d.photos, ...urls].slice(0, MAX_DRAFT_PHOTOS) } : d,
+    );
+  };
+
+  const removeDraftPhoto = (index: number) => {
+    if (!selectedDraft) return;
+    setDrafts((current) =>
+      current.map((d) =>
+        d.title === selectedDraft.title
+          ? { ...d, photos: d.photos.filter((_, i) => i !== index) }
+          : d,
+      ),
+    );
+    setDraftEdits((d) =>
+      d ? { ...d, photos: d.photos.filter((_, i) => i !== index) } : d,
+    );
+  };
 
   const addIdea = () => {
     const text = newIdea.trim();
