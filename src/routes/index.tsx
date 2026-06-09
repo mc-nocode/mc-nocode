@@ -225,7 +225,7 @@ function Index() {
     const newDraft: Draft = {
       title,
       time: "just now",
-      image: ideaPhotos[idea.id] || moriPhoto,
+      photos: ideaPhotos[idea.id] ? [ideaPhotos[idea.id]] : [],
       note: idea.text,
       favorite: false,
       featured: false,
