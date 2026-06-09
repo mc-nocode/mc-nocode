@@ -112,7 +112,7 @@ function Index() {
     const existing = drafts.find((d) => d.title === title);
     if (!existing) {
       setDrafts((current) => [
-        { title, time: "just now", image: moriPhoto, note: "", favorite: false, featured: false },
+        { title, time: "just now", photos: [], note: "", favorite: false, featured: false },
         ...current,
       ]);
     }
@@ -130,7 +130,7 @@ function Index() {
     const draft: Draft = {
       title,
       time: "just now",
-      image: moriPhoto,
+      photos: [],
       note: "",
       favorite: false,
       featured: false,
