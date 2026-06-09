@@ -112,7 +112,7 @@ function Index() {
     const existing = drafts.find((d) => d.title === title);
     if (!existing) {
       setDrafts((current) => [
-        { title, time: "just now", image: moriPhoto, note: "", favorite: false, featured: false },
+        { title, time: "just now", photos: [], note: "", favorite: false, featured: false },
         ...current,
       ]);
     }
@@ -130,7 +130,7 @@ function Index() {
     const draft: Draft = {
       title,
       time: "just now",
-      image: moriPhoto,
+      photos: [],
       note: "",
       favorite: false,
       featured: false,
@@ -225,7 +225,7 @@ function Index() {
     const newDraft: Draft = {
       title,
       time: "just now",
-      image: ideaPhotos[idea.id] || moriPhoto,
+      photos: ideaPhotos[idea.id] ? [ideaPhotos[idea.id]] : [],
       note: idea.text,
       favorite: false,
       featured: false,
@@ -568,7 +568,7 @@ function Index() {
                       onClick={() => setSelectedDraftTitle(draft.title)}
                     >
                       <img
-                        src={draft.image}
+                        src={draft.photos[0] ?? moriPhoto}
                         alt={`${draft.title} draft`}
                         width={320}
                         height={240}
@@ -849,7 +849,7 @@ function Index() {
                               const newDraft: Draft = {
                                 title,
                                 time: "just now",
-                                image: moriPhoto,
+                                photos: [],
                                 note: text,
                                 favorite: false,
                                 featured: false,
