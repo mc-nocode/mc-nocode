@@ -1218,6 +1218,51 @@ function Index() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={managePhotosOpen} onOpenChange={setManagePhotosOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Manage photos</DialogTitle>
+            <DialogDescription>
+              {selectedDraft?.photos.length ?? 0} of {MAX_DRAFT_PHOTOS} photos. Add more or remove what you don't need.
+            </DialogDescription>
+          </DialogHeader>
+          {selectedDraft && selectedDraft.photos.length > 0 && (
+            <div className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto">
+              {selectedDraft.photos.map((src, i) => (
+                <div key={i} className="relative overflow-hidden rounded-[0.85rem] border border-border bg-card">
+                  <img src={src} alt={`Photo ${i + 1}`} className="aspect-square w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeDraftPhoto(i)}
+                    aria-label={`Remove photo ${i + 1}`}
+                    className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-background/90 text-destructive shadow-soft transition hover:scale-105 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setManagePhotosOpen(false)}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
+            >
+              Done
+            </button>
+            <button
+              type="button"
+              disabled={(selectedDraft?.photos.length ?? 0) >= MAX_DRAFT_PHOTOS}
+              onClick={() => draftPhotoInputRef.current?.click()}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-50"
+            >
+              Add more
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
