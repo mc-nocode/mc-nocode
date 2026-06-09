@@ -1094,7 +1094,7 @@ function Index() {
                   className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] bg-primary px-3 py-2.5 text-xs font-semibold text-primary-foreground shadow-soft transition hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-ring/20"
                 >
                   <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
-                  Create Draft
+                  Create draft
                 </button>
               </div>
             </section>
