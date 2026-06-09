@@ -412,15 +412,51 @@ function Index() {
         <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-5">
           {activeTab === "Home" && selectedDraft && draftEdits && (
             <section className="slow-rise space-y-5" aria-label="Draft detail">
-              <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card">
-                <img
-                  src={selectedDraft.image}
-                  alt={`${selectedDraft.title} draft`}
-                  width={320}
-                  height={320}
-                  className="aspect-square w-full object-cover"
-                />
-              </div>
+              <input
+                ref={draftPhotoInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  addPhotosToDraft(e.target.files);
+                  e.target.value = "";
+                }}
+              />
+              {draftEdits.photos.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => draftPhotoInputRef.current?.click()}
+                  className="flex w-full flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-border bg-surface p-10 text-center transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary">
+                    <ImagePlus className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">Add photos</span>
+                  <span className="text-xs text-muted-foreground">Up to {MAX_DRAFT_PHOTOS} photos</span>
+                </button>
+              ) : (
+                <div className="relative">
+                  <div className="grid grid-cols-2 gap-2">
+                    {draftEdits.photos.map((src, i) => (
+                      <img
+                        key={`${src}-${i}`}
+                        src={src}
+                        alt={`${selectedDraft.title} photo ${i + 1}`}
+                        className="aspect-square w-full rounded-[1rem] border border-border object-cover"
+                      />
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Edit photos"
+                    onClick={() => setManagePhotosOpen(true)}
+                    className="absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
+                  >
+                    <PenLine className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground" htmlFor="draft-title">
