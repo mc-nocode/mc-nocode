@@ -651,7 +651,7 @@ function Index() {
                       onClick={() => setSelectedDraftTitle(draft.title)}
                     >
                       <img
-                        src={draft.image}
+                        src={draft.photos[0] ?? moriPhoto}
                         alt={`${draft.title} draft`}
                         width={320}
                         height={240}
