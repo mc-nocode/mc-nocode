@@ -368,7 +368,7 @@ function Index() {
     : viewingIdea && activeTab === "Ideas"
       ? "Idea"
       : activeTab === "Home"
-        ? "Creator Space"
+        ? "Creator space"
         : activeTab === "Library"
           ? "Library"
           : "Ideas";
@@ -505,7 +505,7 @@ function Index() {
                     className={`h-3.5 w-3.5 ${draftEdits.favorite ? "fill-amber-500 text-amber-500" : "text-muted-foreground"}`}
                     aria-hidden="true"
                   />
-                  {draftEdits.favorite ? "Favorited" : "Mark Favorite"}
+                  {draftEdits.favorite ? "Favorited" : "Mark favorite"}
                 </button>
                 <button
                   type="button"
@@ -522,7 +522,7 @@ function Index() {
                     className={`h-3.5 w-3.5 ${draftEdits.featured ? "fill-primary text-primary" : ""}`}
                     aria-hidden="true"
                   />
-                  {draftEdits.featured ? "Featured" : "Mark Featured"}
+                  {draftEdits.featured ? "Featured" : "Mark featured"}
                 </button>
               </div>
 
@@ -880,10 +880,10 @@ function Index() {
                 </article>
               </div>
 
-              {/* Idea Generation */}
+              {/* Idea generation */}
               <div className="space-y-2">
                 <p className="px-1 text-sm font-medium text-ink-soft">
-                  Idea Generation
+                  Idea generation
                 </p>
                 <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
                   <div className="flex items-center justify-between gap-3">
@@ -920,13 +920,13 @@ function Index() {
                           className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-secondary px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
-                            if (action.label === "Add to List") {
+                            if (action.label === "Add to list") {
                               const text = previewDraft.caption;
                               setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
                               setDraftSeed((s) => s + 1);
                             } else if (action.label === "Not this") {
                               setDraftSeed((s) => s + 1);
-                            } else if (action.label === "Use in Draft") {
+                            } else if (action.label === "Use in draft") {
                               const text = previewDraft.caption;
                               const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
                               const newDraft: Draft = {
@@ -1060,7 +1060,7 @@ function Index() {
                 />
                 <div className="rounded-[1rem] bg-secondary p-3">
                   <div className="flex items-center gap-1.5">
-                    <p className="text-xs font-semibold text-primary">Idea Generation</p>
+                    <p className="text-xs font-semibold text-primary">Idea generation</p>
                     <button
                       type="button"
                       aria-label="Copy generated idea"
@@ -1086,7 +1086,7 @@ function Index() {
                   className="flex flex-1 items-center justify-center gap-2 rounded-[1rem] border border-border bg-background px-3 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
                 >
                   <ImagePlus className="h-3.5 w-3.5" aria-hidden="true" />
-                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from Library"}
+                  {ideaPhotos[viewingIdea.id] ? "Change photo" : "Add photo from library"}
                 </button>
                 <button
                   type="button"
@@ -1162,7 +1162,7 @@ function Index() {
       <Dialog open={showLibraryPicker} onOpenChange={setShowLibraryPicker}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add a photo from Library</DialogTitle>
+            <DialogTitle>Add a photo from library</DialogTitle>
             <DialogDescription>
               Pick a photo or video already in your library to attach to this idea.
             </DialogDescription>
