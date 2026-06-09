@@ -149,8 +149,39 @@ function Index() {
     draftEdits.title.trim() !== selectedDraft.title ||
     draftEdits.note !== selectedDraft.note ||
     draftEdits.favorite !== selectedDraft.favorite ||
-    draftEdits.featured !== selectedDraft.featured
+    draftEdits.featured !== selectedDraft.featured ||
+    draftEdits.photos.length !== selectedDraft.photos.length ||
+    draftEdits.photos.some((p, i) => p !== selectedDraft.photos[i])
   ));
+
+  const [managePhotosOpen, setManagePhotosOpen] = useState(false);
+  const draftPhotoInputRef = useRef<HTMLInputElement | null>(null);
+
+  const addPhotosToDraft = (files: FileList | null) => {
+    if (!files) return;
+    setDraftEdits((d) => {
+      if (!d) return d;
+      const remaining = MAX_DRAFT_PHOTOS - d.photos.length;
+      if (remaining <= 0) {
+        toast.error(`You can attach up to ${MAX_DRAFT_PHOTOS} photos`);
+        return d;
+      }
+      const incoming = Array.from(files)
+        .filter((f) => f.type.startsWith("image/"))
+        .slice(0, remaining)
+        .map((f) => URL.createObjectURL(f));
+      if (!incoming.length) return d;
+      return { ...d, photos: [...d.photos, ...incoming] };
+    });
+  };
+
+  const removeDraftPhoto = (index: number) => {
+    setDraftEdits((d) => {
+      if (!d) return d;
+      const next = d.photos.filter((_, i) => i !== index);
+      return { ...d, photos: next };
+    });
+  };
 
   const [ideas, setIdeas] = useState<ContentIdea[]>(initialContentIdeas);
   const [newIdea, setNewIdea] = useState("");
