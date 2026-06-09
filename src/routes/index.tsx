@@ -459,7 +459,7 @@ function Index() {
               )}
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground" htmlFor="draft-title">
+                <label className="text-sm font-medium text-ink-soft" htmlFor="draft-title">
                   Title
                 </label>
                 <input
@@ -511,7 +511,7 @@ function Index() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="text-sm font-medium text-ink-soft">
                   Notes
                 </p>
                 <textarea
