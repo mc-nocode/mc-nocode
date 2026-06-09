@@ -1202,6 +1202,62 @@ function Index() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={managePhotosOpen} onOpenChange={setManagePhotosOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Manage photos</DialogTitle>
+            <DialogDescription>
+              {(draftEdits?.photos.length ?? 0)} of {MAX_DRAFT_PHOTOS} photos attached.
+            </DialogDescription>
+          </DialogHeader>
+          {draftEdits && draftEdits.photos.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2">
+              {draftEdits.photos.map((src, i) => (
+                <div
+                  key={`${src}-${i}`}
+                  className="group relative overflow-hidden rounded-[0.85rem] border border-border bg-card"
+                >
+                  <img
+                    src={src}
+                    alt={`Photo ${i + 1}`}
+                    className="aspect-square w-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Remove photo ${i + 1}`}
+                    onClick={() => removeDraftPhoto(i)}
+                    className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-background/95 text-destructive shadow-soft ring-1 ring-border transition hover:bg-destructive/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="rounded-[1rem] border border-border bg-surface p-6 text-center text-xs text-muted-foreground">
+              No photos yet. Add some to get started.
+            </p>
+          )}
+          <DialogFooter className="gap-2 sm:gap-2">
+            <button
+              type="button"
+              disabled={(draftEdits?.photos.length ?? 0) >= MAX_DRAFT_PHOTOS}
+              onClick={() => draftPhotoInputRef.current?.click()}
+              className="rounded-[1rem] border border-border bg-secondary px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Add more
+            </button>
+            <button
+              type="button"
+              onClick={() => setManagePhotosOpen(false)}
+              className="rounded-[1rem] bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:scale-[1.02]"
+            >
+              Done
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
