@@ -932,7 +932,7 @@ function Index() {
                               const newDraft: Draft = {
                                 title,
                                 time: "just now",
-                                image: moriPhoto,
+                                photos: [moriPhoto],
                                 note: text,
                                 favorite: false,
                                 featured: false,
