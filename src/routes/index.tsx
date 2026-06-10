@@ -1,3 +1,4 @@
+import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -20,6 +21,7 @@ import {
   Star,
   Trash2,
   Play,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import moriPhoto from "../assets/mori-memory-photo.jpg";
@@ -93,6 +95,134 @@ const buildPostDraft = (idea: string) => ({
 });
 
 type Tab = "Home" | "Library" | "Ideas";
+
+function PhotoTile({
+  src,
+  alt,
+  onRemove,
+  onClick,
+  className,
+  overlay,
+}: {
+  src: string;
+  alt: string;
+  onRemove: () => void;
+  onClick?: () => void;
+  className?: string;
+  overlay?: React.ReactNode;
+}) {
+  return (
+    <div className={`group relative overflow-hidden bg-muted ${className ?? ""}`}>
+      <button
+        type="button"
+        onClick={onClick}
+        className="absolute inset-0 h-full w-full focus:outline-none"
+        aria-label={alt}
+      >
+        <img src={src} alt={alt} className="h-full w-full object-cover" />
+      </button>
+      {overlay}
+      <button
+        type="button"
+        aria-label="Remove photo"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        className="absolute right-1.5 top-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 shadow transition group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/60"
+      >
+        <X className="h-4 w-4" aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+function PhotoCollage({
+  photos,
+  onRemove,
+  onExpand,
+  title,
+}: {
+  photos: string[];
+  onRemove: (i: number) => void;
+  onExpand: () => void;
+  title: string;
+}) {
+  const count = photos.length;
+  const alt = (i: number) => `${title} photo ${i + 1}`;
+  const radius = "rounded-[1rem]";
+
+  if (count === 1) {
+    return (
+      <PhotoTile
+        src={photos[0]}
+        alt={alt(0)}
+        onRemove={() => onRemove(0)}
+        className={`${radius} aspect-[4/3] w-full border border-border`}
+      />
+    );
+  }
+
+  if (count === 2) {
+    return (
+      <div className={`grid grid-cols-2 gap-1 overflow-hidden ${radius} border border-border`}>
+        {photos.map((src, i) => (
+          <PhotoTile key={i} src={src} alt={alt(i)} onRemove={() => onRemove(i)} className="aspect-square" />
+        ))}
+      </div>
+    );
+  }
+
+  if (count === 3) {
+    return (
+      <div className={`grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden ${radius} border border-border aspect-[4/3]`}>
+        <PhotoTile src={photos[0]} alt={alt(0)} onRemove={() => onRemove(0)} className="row-span-2 h-full" />
+        <PhotoTile src={photos[1]} alt={alt(1)} onRemove={() => onRemove(1)} className="h-full" />
+        <PhotoTile src={photos[2]} alt={alt(2)} onRemove={() => onRemove(2)} className="h-full" />
+      </div>
+    );
+  }
+
+  if (count === 4) {
+    return (
+      <div className={`grid grid-cols-2 gap-1 overflow-hidden ${radius} border border-border`}>
+        {photos.map((src, i) => (
+          <PhotoTile key={i} src={src} alt={alt(i)} onRemove={() => onRemove(i)} className="aspect-square" />
+        ))}
+      </div>
+    );
+  }
+
+  // 5+
+  const extra = count - 5;
+  return (
+    <div className={`overflow-hidden ${radius} border border-border`}>
+      <div className="grid grid-cols-2 gap-1">
+        <PhotoTile src={photos[0]} alt={alt(0)} onRemove={() => onRemove(0)} className="aspect-square" />
+        <PhotoTile src={photos[1]} alt={alt(1)} onRemove={() => onRemove(1)} className="aspect-square" />
+      </div>
+      <div className="mt-1 grid grid-cols-3 gap-1">
+        <PhotoTile src={photos[2]} alt={alt(2)} onRemove={() => onRemove(2)} className="aspect-square" />
+        <PhotoTile src={photos[3]} alt={alt(3)} onRemove={() => onRemove(3)} className="aspect-square" />
+        <PhotoTile
+          src={photos[4]}
+          alt={alt(4)}
+          onRemove={() => onRemove(4)}
+          onClick={extra > 0 ? onExpand : undefined}
+          className="aspect-square"
+          overlay={
+            extra > 0 ? (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 text-2xl font-semibold text-white">
+                +{extra}
+              </div>
+            ) : null
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
 
 function Index() {
   const [activeTab, setActiveTab] = useState<Tab>("Home");
@@ -437,24 +567,34 @@ function Index() {
                 </button>
               ) : (
                 <div className="relative">
-                  <div className="grid grid-cols-2 gap-2">
-                    {draftEdits.photos.map((src, i) => (
-                      <img
-                        key={`${src}-${i}`}
-                        src={src}
-                        alt={`${selectedDraft.title} photo ${i + 1}`}
-                        className="aspect-square w-full rounded-[1rem] border border-border object-cover"
-                      />
-                    ))}
+                  <PhotoCollage
+                    photos={draftEdits.photos}
+                    onRemove={removeDraftPhoto}
+                    onExpand={() => setManagePhotosOpen(true)}
+                    title={selectedDraft.title}
+                  />
+                  <div className="absolute bottom-2 right-2 flex gap-2">
+                    {draftEdits.photos.length < MAX_DRAFT_PHOTOS && (
+                      <button
+                        type="button"
+                        aria-label="Add photos"
+                        onClick={() => draftPhotoInputRef.current?.click()}
+                        className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
+                      >
+                        <Plus className="h-4 w-4" aria-hidden="true" />
+                        Add
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      aria-label="Edit photos"
+                      onClick={() => setManagePhotosOpen(true)}
+                      className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
+                    >
+                      <PenLine className="h-4 w-4" aria-hidden="true" />
+                      Edit
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    aria-label="Edit photos"
-                    onClick={() => setManagePhotosOpen(true)}
-                    className="absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
-                  >
-                    <PenLine className="h-4 w-4" aria-hidden="true" />
-                  </button>
                 </div>
               )}
 
@@ -1211,32 +1351,41 @@ function Index() {
               {(draftEdits?.photos.length ?? 0)} of {MAX_DRAFT_PHOTOS} photos attached.
             </DialogDescription>
           </DialogHeader>
-          {draftEdits && draftEdits.photos.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2">
-              {draftEdits.photos.map((src, i) => (
-                <div
-                  key={`${src}-${i}`}
-                  className="group relative overflow-hidden rounded-[0.85rem] border border-border bg-card"
+          <div className="grid grid-cols-3 gap-2">
+            {draftEdits?.photos.map((src, i) => (
+              <div
+                key={`${src}-${i}`}
+                className="group relative overflow-hidden rounded-[0.85rem] border border-border bg-card"
+              >
+                <img
+                  src={src}
+                  alt={`Photo ${i + 1}`}
+                  className="aspect-square w-full object-cover"
+                />
+                <button
+                  type="button"
+                  aria-label={`Remove photo ${i + 1}`}
+                  onClick={() => removeDraftPhoto(i)}
+                  className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white shadow transition hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-ring/30"
                 >
-                  <img
-                    src={src}
-                    alt={`Photo ${i + 1}`}
-                    className="aspect-square w-full object-cover"
-                  />
-                  <button
-                    type="button"
-                    aria-label={`Remove photo ${i + 1}`}
-                    onClick={() => removeDraftPhoto(i)}
-                    className="absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-background/95 text-destructive shadow-soft ring-1 ring-border transition hover:bg-destructive/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="rounded-[1rem] border border-border bg-surface p-6 text-center text-xs text-muted-foreground">
-              No photos yet. Add some to get started.
+                  <X className="h-3.5 w-3.5" aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+            {(draftEdits?.photos.length ?? 0) < MAX_DRAFT_PHOTOS && (
+              <button
+                type="button"
+                onClick={() => draftPhotoInputRef.current?.click()}
+                className="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-[0.85rem] border-2 border-dashed border-border bg-surface text-muted-foreground transition hover:bg-card hover:text-foreground focus:outline-none focus:ring-4 focus:ring-ring/15"
+              >
+                <Plus className="h-5 w-5" aria-hidden="true" />
+                <span className="text-[11px] font-semibold">Add photos</span>
+              </button>
+            )}
+          </div>
+          {(draftEdits?.photos.length ?? 0) === 0 && (
+            <p className="text-center text-xs text-muted-foreground">
+              No photos yet. Use the tile above to add some.
             </p>
           )}
           <DialogFooter className="gap-2 sm:gap-2">
