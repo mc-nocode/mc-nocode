@@ -438,24 +438,34 @@ function Index() {
                 </button>
               ) : (
                 <div className="relative">
-                  <div className="grid grid-cols-2 gap-2">
-                    {draftEdits.photos.map((src, i) => (
-                      <img
-                        key={`${src}-${i}`}
-                        src={src}
-                        alt={`${selectedDraft.title} photo ${i + 1}`}
-                        className="aspect-square w-full rounded-[1rem] border border-border object-cover"
-                      />
-                    ))}
+                  <PhotoCollage
+                    photos={draftEdits.photos}
+                    onRemove={removeDraftPhoto}
+                    onExpand={() => setManagePhotosOpen(true)}
+                    title={selectedDraft.title}
+                  />
+                  <div className="absolute bottom-2 right-2 flex gap-2">
+                    {draftEdits.photos.length < MAX_DRAFT_PHOTOS && (
+                      <button
+                        type="button"
+                        aria-label="Add photos"
+                        onClick={() => draftPhotoInputRef.current?.click()}
+                        className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
+                      >
+                        <Plus className="h-4 w-4" aria-hidden="true" />
+                        Add
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      aria-label="Edit photos"
+                      onClick={() => setManagePhotosOpen(true)}
+                      className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
+                    >
+                      <PenLine className="h-4 w-4" aria-hidden="true" />
+                      Edit
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    aria-label="Edit photos"
-                    onClick={() => setManagePhotosOpen(true)}
-                    className="absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full bg-background/95 text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
-                  >
-                    <PenLine className="h-4 w-4" aria-hidden="true" />
-                  </button>
                 </div>
               )}
 
