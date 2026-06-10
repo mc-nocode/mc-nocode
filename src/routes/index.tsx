@@ -95,6 +95,134 @@ const buildPostDraft = (idea: string) => ({
 
 type Tab = "Home" | "Library" | "Ideas";
 
+function PhotoTile({
+  src,
+  alt,
+  onRemove,
+  onClick,
+  className,
+  overlay,
+}: {
+  src: string;
+  alt: string;
+  onRemove: () => void;
+  onClick?: () => void;
+  className?: string;
+  overlay?: React.ReactNode;
+}) {
+  return (
+    <div className={`group relative overflow-hidden bg-muted ${className ?? ""}`}>
+      <button
+        type="button"
+        onClick={onClick}
+        className="absolute inset-0 h-full w-full focus:outline-none"
+        aria-label={alt}
+      >
+        <img src={src} alt={alt} className="h-full w-full object-cover" />
+      </button>
+      {overlay}
+      <button
+        type="button"
+        aria-label="Remove photo"
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove();
+        }}
+        className="absolute right-1.5 top-1.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 shadow transition group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white/60"
+      >
+        <X className="h-4 w-4" aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+function PhotoCollage({
+  photos,
+  onRemove,
+  onExpand,
+  title,
+}: {
+  photos: string[];
+  onRemove: (i: number) => void;
+  onExpand: () => void;
+  title: string;
+}) {
+  const count = photos.length;
+  const alt = (i: number) => `${title} photo ${i + 1}`;
+  const radius = "rounded-[1rem]";
+
+  if (count === 1) {
+    return (
+      <PhotoTile
+        src={photos[0]}
+        alt={alt(0)}
+        onRemove={() => onRemove(0)}
+        className={`${radius} aspect-[4/3] w-full border border-border`}
+      />
+    );
+  }
+
+  if (count === 2) {
+    return (
+      <div className={`grid grid-cols-2 gap-1 overflow-hidden ${radius} border border-border`}>
+        {photos.map((src, i) => (
+          <PhotoTile key={i} src={src} alt={alt(i)} onRemove={() => onRemove(i)} className="aspect-square" />
+        ))}
+      </div>
+    );
+  }
+
+  if (count === 3) {
+    return (
+      <div className={`grid grid-cols-2 grid-rows-2 gap-1 overflow-hidden ${radius} border border-border aspect-[4/3]`}>
+        <PhotoTile src={photos[0]} alt={alt(0)} onRemove={() => onRemove(0)} className="row-span-2 h-full" />
+        <PhotoTile src={photos[1]} alt={alt(1)} onRemove={() => onRemove(1)} className="h-full" />
+        <PhotoTile src={photos[2]} alt={alt(2)} onRemove={() => onRemove(2)} className="h-full" />
+      </div>
+    );
+  }
+
+  if (count === 4) {
+    return (
+      <div className={`grid grid-cols-2 gap-1 overflow-hidden ${radius} border border-border`}>
+        {photos.map((src, i) => (
+          <PhotoTile key={i} src={src} alt={alt(i)} onRemove={() => onRemove(i)} className="aspect-square" />
+        ))}
+      </div>
+    );
+  }
+
+  // 5+
+  const extra = count - 5;
+  return (
+    <div className={`overflow-hidden ${radius} border border-border`}>
+      <div className="grid grid-cols-2 gap-1">
+        <PhotoTile src={photos[0]} alt={alt(0)} onRemove={() => onRemove(0)} className="aspect-square" />
+        <PhotoTile src={photos[1]} alt={alt(1)} onRemove={() => onRemove(1)} className="aspect-square" />
+      </div>
+      <div className="mt-1 grid grid-cols-3 gap-1">
+        <PhotoTile src={photos[2]} alt={alt(2)} onRemove={() => onRemove(2)} className="aspect-square" />
+        <PhotoTile src={photos[3]} alt={alt(3)} onRemove={() => onRemove(3)} className="aspect-square" />
+        <PhotoTile
+          src={photos[4]}
+          alt={alt(4)}
+          onRemove={() => onRemove(4)}
+          onClick={extra > 0 ? onExpand : undefined}
+          className="aspect-square"
+          overlay={
+            extra > 0 ? (
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/55 text-2xl font-semibold text-white">
+                +{extra}
+              </div>
+            ) : null
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+
 function Index() {
   const [activeTab, setActiveTab] = useState<Tab>("Home");
   const [drafts, setDrafts] = useState<Draft[]>(initialDrafts);
