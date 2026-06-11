@@ -891,6 +891,30 @@ function Index() {
               </button>
 
               <div className="flex items-center justify-between px-1">
+                <p className="text-sm font-medium text-ink-soft">Folders</p>
+                <span className="text-xs font-medium text-primary">{folders.length}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {folders.map((folder) => (
+                  <button
+                    key={folder.id}
+                    type="button"
+                    className="quiet-card flex items-center gap-3 rounded-[1.25rem] border border-border bg-card p-3 text-left transition hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                  >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary">
+                      <FolderOpen className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium text-foreground">
+                        {folder.name}
+                      </span>
+                      <span className="block text-[11px] text-muted-foreground">0 items</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between px-1">
                 <p className="text-sm font-medium text-ink-soft">Your library</p>
                 <span className="text-xs font-medium text-primary">{library.length} items</span>
               </div>
