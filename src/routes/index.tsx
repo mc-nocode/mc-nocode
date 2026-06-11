@@ -352,7 +352,36 @@ function Index() {
   const [folders, setFolders] = useState<{ id: number; name: string }[]>([
     { id: 1, name: "Coffee Dates" },
     { id: 2, name: "Pets" },
+    { id: 3, name: "Cream" },
   ]);
+
+  const addFolder = () => {
+    setFolders((current) => {
+      const id = (current.at(-1)?.id ?? 0) + 1;
+      const next = [...current, { id, name: "New folder" }];
+      setEditingFolderId(id);
+      setEditingFolderName("New folder");
+      return next;
+    });
+    setTimeout(() => folderEditInputRef.current?.focus(), 30);
+  };
+
+  const startRenameFolder = (id: number, name: string) => {
+    setEditingFolderId(id);
+    setEditingFolderName(name);
+    setTimeout(() => folderEditInputRef.current?.select(), 30);
+  };
+
+  const commitRenameFolder = () => {
+    if (editingFolderId == null) return;
+    const trimmed = editingFolderName.trim();
+    setFolders((current) =>
+      current.map((f) => (f.id === editingFolderId ? { ...f, name: trimmed || f.name } : f)),
+    );
+    setEditingFolderId(null);
+    setEditingFolderName("");
+  };
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const addIdea = () => {
