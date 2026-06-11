@@ -927,84 +927,71 @@ function Index() {
                 <span className="text-xs font-medium text-primary">{folders.length}</span>
               </div>
               <div className="grid grid-cols-2 gap-2.5">
-                {folders.map((folder) => (
-                  <button
-                    key={folder.id}
-                    type="button"
-                    className="quiet-card flex items-center gap-3 rounded-[1.25rem] border border-border bg-card p-3 text-left transition hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
-                  >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary text-primary">
-                      <FolderOpen className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-foreground">
-                        {folder.name}
-                      </span>
-                      <span className="block text-[11px] text-muted-foreground">0 items</span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center justify-between px-1">
-                <p className="text-sm font-medium text-ink-soft">Your library</p>
-                <span className="text-xs font-medium text-primary">{library.length} items</span>
-              </div>
-
-              {library.length === 0 ? (
-                <p className="rounded-[1.25rem] border border-border bg-surface p-6 text-center text-xs text-muted-foreground">
-                  Nothing here yet. Add a photo or short video to begin your library.
-                </p>
-              ) : (
-                <div className="grid grid-cols-2 gap-2.5">
-                  {library.map((item) => (
+                {folders.map((folder) => {
+                  const isEditing = editingFolderId === folder.id;
+                  return (
                     <div
-                      key={item.id}
-                      className="quiet-card group relative overflow-hidden rounded-[1.25rem] border border-border bg-card"
+                      key={folder.id}
+                      className="quiet-card group relative flex items-center gap-3 rounded-[1.25rem] border border-border bg-card p-3 text-left transition hover:bg-surface"
                     >
-                      {item.kind === "video" ? (
-                        <video
-                          src={item.url}
-                          className="aspect-square w-full object-cover"
-                          muted
-                          playsInline
-                        />
-                      ) : (
-                        <img
-                          src={item.url}
-                          alt={item.name}
-                          className="aspect-square w-full object-cover"
-                        />
-                      )}
-                      <div className="flex items-center justify-between gap-2 p-2.5">
-                        <span className="flex min-w-0 items-center gap-1.5">
-                          {item.kind === "video" ? (
-                            <Film className="h-3 w-3 shrink-0 text-primary" aria-hidden="true" />
-                          ) : (
-                            <FileImage
-                              className="h-3 w-3 shrink-0 text-primary"
-                              aria-hidden="true"
-                            />
-                          )}
-                          <span className="truncate text-[11px] font-medium text-foreground">
-                            {item.name}
-                          </span>
-                        </span>
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary">
+                        <FolderOpen className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        {isEditing ? (
+                          <input
+                            ref={folderEditInputRef}
+                            value={editingFolderName}
+                            onChange={(e) => setEditingFolderName(e.target.value)}
+                            onBlur={commitRenameFolder}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") commitRenameFolder();
+                              if (e.key === "Escape") {
+                                setEditingFolderId(null);
+                                setEditingFolderName("");
+                              }
+                            }}
+                            className="w-full rounded-md border border-border bg-background px-2 py-1 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
+                            maxLength={40}
+                          />
+                        ) : (
+                          <>
+                            <span className="block truncate text-sm font-medium text-foreground">
+                              {folder.name}
+                            </span>
+                            <span className="block text-[11px] text-muted-foreground">
+                              0 items
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      {!isEditing && (
                         <button
                           type="button"
-                          onClick={() => removeLibraryItem(item.id)}
-                          className="rounded-full p-1 text-muted-foreground transition hover:bg-secondary hover:text-primary"
-                          aria-label={`Remove ${item.name}`}
+                          onClick={() => startRenameFolder(folder.id, folder.name)}
+                          className="rounded-full p-1.5 text-muted-foreground transition hover:bg-secondary hover:text-primary"
+                          aria-label={`Rename ${folder.name}`}
                         >
-                          <Trash2 className="h-3 w-3" aria-hidden="true" />
+                          <PenLine className="h-3.5 w-3.5" aria-hidden="true" />
                         </button>
-                      </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              )}
+                  );
+                })}
+                <button
+                  type="button"
+                  onClick={addFolder}
+                  className="flex items-center gap-3 rounded-[1.25rem] border-2 border-dashed border-border bg-surface p-3 text-left transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary">
+                    <Plus className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <span className="text-sm font-medium text-foreground">New folder</span>
+                </button>
+              </div>
             </section>
           )}
+
 
           {activeTab === "Ideas" && !viewingIdea && (
             <section className="slow-rise space-y-6" aria-label="Ideas">
