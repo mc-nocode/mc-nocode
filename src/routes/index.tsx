@@ -346,6 +346,10 @@ function Index() {
 
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
+  const [folders, setFolders] = useState<{ id: number; name: string }[]>([
+    { id: 1, name: "Coffee Dates" },
+    { id: 2, name: "Pets" },
+  ]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const addIdea = () => {
