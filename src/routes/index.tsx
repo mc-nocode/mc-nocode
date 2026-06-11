@@ -564,11 +564,8 @@ function Index() {
           <button
             className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
             type="button"
-            aria-label="Add"
-            onClick={() => {
-              if (activeTab === "Library") fileInputRef.current?.click();
-              else createNewDraft();
-            }}
+            aria-label="New draft"
+            onClick={createNewDraft}
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
           </button>
