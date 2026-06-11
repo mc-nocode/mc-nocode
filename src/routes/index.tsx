@@ -346,6 +346,9 @@ function Index() {
 
 
   const [library, setLibrary] = useState<LibraryItem[]>([]);
+  const [editingFolderId, setEditingFolderId] = useState<number | null>(null);
+  const [editingFolderName, setEditingFolderName] = useState("");
+  const folderEditInputRef = useRef<HTMLInputElement>(null);
   const [folders, setFolders] = useState<{ id: number; name: string }[]>([
     { id: 1, name: "Coffee Dates" },
     { id: 2, name: "Pets" },
