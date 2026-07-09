@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Archive,
+  ArrowRight,
   Bookmark,
   ChevronLeft,
   ChevronRight,
@@ -14,6 +15,7 @@ import {
   ImagePlus,
   Lightbulb,
   Lock,
+  MoreHorizontal,
   PenLine,
   Plus,
   RefreshCw,
