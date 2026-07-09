@@ -785,40 +785,39 @@ function Index() {
               <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Ideas for you">
                 <div className="flex items-center justify-between px-1">
                   <p className="text-sm font-medium text-ink-soft">Ideas for you</p>
-                  <button className="text-xs font-medium text-muted-foreground hover:text-primary" type="button">
+                  <button
+                    className="text-xs font-medium text-muted-foreground hover:text-primary"
+                    type="button"
+                    onClick={() => handleTabChange("Ideas")}
+                  >
                     See all
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2.5">
-                  {(drafts.filter((d) => d.favorite).length
-                    ? drafts.filter((d) => d.favorite)
-                    : drafts
-                  )
-                    .slice(0, 3)
-                    .map((draft, i) => (
-                      <button
-                        key={draft.title}
-                        className="quiet-card flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
-                        type="button"
-                        onClick={() => setSelectedDraftTitle(draft.title)}
-                      >
-                        <span className="block min-h-[2.5rem] text-[13px] font-medium leading-tight text-foreground line-clamp-2">
-                          {draft.title}
-                        </span>
-                        <span className="mt-1 block text-[11px] text-muted-foreground">
-                          {i === 1 ? "Carousel" : "Reel"}
-                        </span>
-                        <span className="mt-2 block overflow-hidden rounded-[0.85rem]">
-                          <img
-                            src={draft.photos[0] ?? moriPhoto}
-                            alt={`${draft.title} preview`}
-                            width={240}
-                            height={180}
-                            className="aspect-[4/3] w-full object-cover"
-                          />
-                        </span>
-                      </button>
-                    ))}
+                  {homeIdeaSuggestions.map((suggestion) => (
+                    <button
+                      key={suggestion.title}
+                      className="quiet-card flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      type="button"
+                      onClick={() => handleTabChange("Ideas")}
+                    >
+                      <span className="block min-h-[2.5rem] text-[13px] font-medium leading-tight text-foreground line-clamp-2">
+                        {suggestion.title}
+                      </span>
+                      <span className="mt-1 block text-[11px] text-muted-foreground">
+                        {suggestion.format}
+                      </span>
+                      <span className="mt-2 block overflow-hidden rounded-[0.85rem]">
+                        <img
+                          src={moriPhoto}
+                          alt={`${suggestion.title} preview`}
+                          width={240}
+                          height={180}
+                          className="aspect-[4/3] w-full object-cover"
+                        />
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </section>
 
