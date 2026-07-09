@@ -743,100 +743,82 @@ function Index() {
           {activeTab === "Home" && !selectedDraft && (
             <>
               <section
-                className="slow-rise space-y-4 [animation-delay:80ms]"
+                className="slow-rise [animation-delay:80ms]"
                 aria-label="Featured draft"
               >
-                <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Featured draft</p>
-                  <button
-                    type="button"
-                    aria-label="Edit featured draft"
-                    onClick={() => {
-                      const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                      if (featured) setSelectedDraftTitle(featured.title);
-                    }}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                  >
-                    <PenLine className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                </div>
-                <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
-                  <div className="overflow-hidden rounded-[1.15rem] bg-linen">
-                    <img
-                      src={moriPhoto}
-                      alt="A quiet sunlit table with a cup, linen napkin, and single flower by a window"
-                      width={1024}
-                      height={1280}
-                      className="breathing-photo aspect-[16/10] w-full object-cover"
-                    />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const featured = drafts.find((d) => d.featured) ?? drafts[0];
+                    if (featured) setSelectedDraftTitle(featured.title);
+                  }}
+                  className="quiet-card group relative block w-full overflow-hidden rounded-[1.6rem] border border-border bg-card text-left shadow-soft transition duration-500 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-ring/15"
+                >
+                  <img
+                    src={moriPhoto}
+                    alt="Morning light, quiet mind"
+                    width={1024}
+                    height={1280}
+                    className="breathing-photo aspect-[4/5] w-full object-cover"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
+                    <div className="min-w-0">
+                      <span className="inline-flex items-center rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-foreground backdrop-blur">
+                        Featured draft
+                      </span>
+                      <h3 className="font-reflective mt-3 text-3xl leading-tight text-white">
+                        Morning light,<br />quiet mind
+                      </h3>
+                      <p className="mt-1 flex items-center gap-1.5 text-xs text-white/80">
+                        <Film className="h-3.5 w-3.5" aria-hidden="true" />
+                        Reel · 15s
+                      </p>
+                    </div>
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-foreground shadow-soft transition group-hover:translate-x-0.5">
+                      <ArrowRight className="h-5 w-5" aria-hidden="true" />
+                    </span>
                   </div>
-                  <div className="px-1 pb-1 pt-4">
-                    <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      Saved privately · ready to shape
-                    </p>
-                    <h3 className="font-reflective mt-2 text-3xl leading-tight text-foreground">
-                      Morning reel cover
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      A calm visual starting point for a thoughtful post, reel, or carousel. Natural light, soft textures, and a quiet moment that invites people to pause and look closer.
-                    </p>
-                    <button
-                      className="mt-2 text-xs font-medium text-primary"
-                      type="button"
-                      onClick={() => {
-                        const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                        if (featured) setSelectedDraftTitle(featured.title);
-                      }}
-                    >
-                      See more
-                    </button>
-                  </div>
-                </article>
+                </button>
               </section>
 
-              <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Favorites">
+              <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Ideas for you">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Keep going</p>
-                  <button className="text-xs font-medium text-primary" type="button">
-                    View all
+                  <p className="text-sm font-medium text-ink-soft">Ideas for you</p>
+                  <button className="text-xs font-medium text-muted-foreground hover:text-primary" type="button">
+                    See all
                   </button>
                 </div>
                 <div className="grid grid-cols-3 gap-2.5">
-                  {drafts.filter((d) => d.favorite).map((draft) => (
-                    <button
-                      key={draft.title}
-                      className="quiet-card relative overflow-hidden rounded-[1.25rem] border border-border bg-card text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
-                      type="button"
-                      onClick={() => setSelectedDraftTitle(draft.title)}
-                    >
-                      <img
-                        src={draft.photos[0] ?? moriPhoto}
-                        alt={`${draft.title} draft`}
-                        width={320}
-                        height={240}
-                        className="aspect-square w-full object-cover"
-                      />
-                      {(draft.favorite || draft.featured) && (
-                        <div className="absolute right-2 top-2 flex gap-1">
-                          {draft.favorite && (
-                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
-                          )}
-                          {draft.featured && (
-                            <Bookmark className="h-3.5 w-3.5 fill-primary text-primary" aria-hidden="true" />
-                          )}
-                        </div>
-                      )}
-                      <span className="block p-2.5">
-                        <span className="block truncate text-xs font-semibold text-foreground">
+                  {(drafts.filter((d) => d.favorite).length
+                    ? drafts.filter((d) => d.favorite)
+                    : drafts
+                  )
+                    .slice(0, 3)
+                    .map((draft, i) => (
+                      <button
+                        key={draft.title}
+                        className="quiet-card flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                        type="button"
+                        onClick={() => setSelectedDraftTitle(draft.title)}
+                      >
+                        <span className="block min-h-[2.5rem] text-[13px] font-medium leading-tight text-foreground line-clamp-2">
                           {draft.title}
                         </span>
-                        <span className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
-                          <Clock3 className="h-3 w-3" aria-hidden="true" />
-                          <span className="truncate">{draft.time}</span>
+                        <span className="mt-1 block text-[11px] text-muted-foreground">
+                          {i === 1 ? "Carousel" : "Reel"}
                         </span>
-                      </span>
-                    </button>
-                  ))}
+                        <span className="mt-2 block overflow-hidden rounded-[0.85rem]">
+                          <img
+                            src={draft.photos[0] ?? moriPhoto}
+                            alt={`${draft.title} preview`}
+                            width={240}
+                            height={180}
+                            className="aspect-[4/3] w-full object-cover"
+                          />
+                        </span>
+                      </button>
+                    ))}
                 </div>
               </section>
 
@@ -846,37 +828,43 @@ function Index() {
               >
                 <div className="flex items-center justify-between px-1">
                   <p className="text-sm font-medium text-ink-soft">Recent drafts</p>
-                  <button className="text-xs font-medium text-primary" type="button">
-                    Organize
+                  <button className="text-xs font-medium text-muted-foreground hover:text-primary" type="button">
+                    See all
                   </button>
                 </div>
                 <div className="space-y-2.5">
-                  {recentFiles.slice(0, recentVisibleCount).map((file) => {
-                    const Icon = file.icon;
-                    return (
-                      <button
-                        key={file.title}
-                        className="quiet-card flex w-full items-center gap-3 rounded-[1.25rem] border border-border bg-surface p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/15"
-                        type="button"
-                        onClick={() => openOrCreateDraftFromRecent(file.title)}
+                  {recentFiles.slice(0, recentVisibleCount).map((file) => (
+                    <button
+                      key={file.title}
+                      className="quiet-card flex w-full items-center gap-3 rounded-[1.25rem] border border-border bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                      type="button"
+                      onClick={() => openOrCreateDraftFromRecent(file.title)}
+                    >
+                      <span className="block h-14 w-14 shrink-0 overflow-hidden rounded-[0.9rem] bg-muted">
+                        <img
+                          src={moriPhoto}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-foreground">
+                          {file.title}
+                        </span>
+                        <span className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+                          <Film className="h-3 w-3" aria-hidden="true" />
+                          Reel · 12s
+                        </span>
+                      </span>
+                      <span
+                        className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
+                        aria-hidden="true"
                       >
-                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[1rem] bg-secondary text-primary">
-                          <Icon className="h-4 w-4" aria-hidden="true" />
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-foreground">
-                            {file.title}
-                          </span>
-                          <span className="mt-1 block truncate text-xs text-muted-foreground">
-                            {file.meta}
-                          </span>
-                        </span>
-                        <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] text-accent-foreground">
-                          {file.status}
-                        </span>
-                      </button>
-                    );
-                  })}
+                        <MoreHorizontal className="h-4 w-4" />
+                      </span>
+                    </button>
+                  ))}
                   {recentVisibleCount < recentFiles.length && (
                     <button
                       type="button"
@@ -887,10 +875,11 @@ function Index() {
                     </button>
                   )}
                 </div>
-
               </section>
             </>
           )}
+
+
 
           {activeTab === "Library" && (
             <section className="slow-rise space-y-4" aria-label="Library">
