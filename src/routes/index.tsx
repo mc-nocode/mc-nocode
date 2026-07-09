@@ -793,7 +793,7 @@ function Index() {
                   <button
                     className="text-xs font-medium text-muted-foreground hover:text-primary"
                     type="button"
-                    onClick={() => handleTabChange("Ideas")}
+                    onClick={() => requestSwitchTab("Ideas")}
                   >
                     See all
                   </button>
@@ -804,7 +804,7 @@ function Index() {
                       key={suggestion.title}
                       className="quiet-card flex flex-col overflow-hidden rounded-[1.25rem] border border-border bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                       type="button"
-                      onClick={() => handleTabChange("Ideas")}
+                      onClick={() => requestSwitchTab("Ideas")}
                     >
                       <span className="block min-h-[2.5rem] text-[13px] font-medium leading-tight text-foreground line-clamp-2">
                         {suggestion.title}
