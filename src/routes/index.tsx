@@ -326,6 +326,11 @@ function Index() {
     "a tiny win from this week worth celebrating",
     "a reflection on slowing down in a fast-moving feed",
   ];
+  const homeIdeaSuggestions: { title: string; format: string }[] = [
+    { title: "A slow morning sets the tone", format: "Reel" },
+    { title: "Behind the simple things", format: "Carousel" },
+    { title: "Little moments, big meaning", format: "Reel" },
+  ];
   const draftVariants = [
     (idea: string) => `A small note from today's creative practice: ${idea}. Keeping it simple, honest, and useful for the people building at their own pace.`,
     (idea: string) => `Here's something I've been sitting with: ${idea}. Sharing it in case it sparks a quieter, more intentional moment in your day.`,
