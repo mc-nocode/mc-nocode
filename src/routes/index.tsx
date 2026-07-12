@@ -1083,7 +1083,7 @@ function Index() {
                       return (
                         <button
                           key={action.label}
-                          className="group flex items-center gap-3 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          className="group flex items-center gap-2.5 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
                             if (action.label === "Save idea") {
