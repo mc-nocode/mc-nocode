@@ -11,6 +11,7 @@ import {
   FileImage,
   Film,
   FolderOpen,
+  Heart,
   ImagePlus,
   Lightbulb,
   Lock,
