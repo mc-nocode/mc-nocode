@@ -1112,10 +1112,10 @@ function Index() {
                             <Icon className="h-4 w-4" aria-hidden="true" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-semibold text-foreground">
+                            <span className="block truncate text-xs font-semibold text-foreground">
                               {action.label}
                             </span>
-                            <span className="block text-xs leading-snug text-muted-foreground">
+                            <span className="block truncate text-[10px] leading-snug text-muted-foreground">
                               {action.detail}
                             </span>
                           </span>
