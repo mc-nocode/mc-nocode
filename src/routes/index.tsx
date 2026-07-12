@@ -1115,7 +1115,7 @@ function Index() {
                             <span className="block truncate text-[10px] font-semibold text-foreground">
                               {action.label}
                             </span>
-                            <span className="block truncate text-[9px] leading-snug text-muted-foreground">
+                            <span className="block text-[9px] leading-snug text-muted-foreground">
                               {action.detail}
                             </span>
                           </span>
