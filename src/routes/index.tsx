@@ -1079,20 +1079,18 @@ function Index() {
                   <p className="text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
-                  <div className="grid grid-cols-3 gap-2" aria-label="Idea actions">
+                  <div className="grid grid-cols-2 gap-3" aria-label="Idea actions">
                     {ideaActions.map((action) => {
                       const Icon = action.icon;
                       return (
                         <button
                           key={action.label}
-                          className="soft-button flex min-h-20 flex-col items-center justify-center rounded-[1rem] bg-secondary px-2 py-3 text-center transition duration-500 hover:-translate-y-0.5 hover:bg-accent focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          className="group flex items-center gap-3 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
-                            if (action.label === "Add to List") {
+                            if (action.label === "Save idea") {
                               const text = previewDraft.caption;
                               setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
-                              setDraftSeed((s) => s + 1);
-                            } else if (action.label === "Not this") {
                               setDraftSeed((s) => s + 1);
                             } else if (action.label === "Use in Draft") {
                               const text = previewDraft.caption;
@@ -1112,13 +1110,21 @@ function Index() {
                             }
                           }}
                         >
-                          <Icon className="mb-2 h-4 w-4 text-primary" aria-hidden="true" />
-                          <span className="text-xs font-semibold text-foreground">
-                            {action.label}
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
+                            <Icon className="h-4 w-4" aria-hidden="true" />
                           </span>
-                          <span className="mt-0.5 text-[10px] leading-snug text-muted-foreground">
-                            {action.detail}
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm font-semibold text-foreground">
+                              {action.label}
+                            </span>
+                            <span className="block text-xs leading-snug text-muted-foreground">
+                              {action.detail}
+                            </span>
                           </span>
+                          <ChevronRight
+                            className="h-4 w-4 shrink-0 text-primary transition group-hover:translate-x-0.5"
+                            aria-hidden="true"
+                          />
                         </button>
                       );
                     })}
