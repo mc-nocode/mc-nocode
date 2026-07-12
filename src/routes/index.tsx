@@ -2,7 +2,6 @@ import type React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  Archive,
   Bookmark,
   ChevronLeft,
   ChevronRight,
@@ -14,7 +13,6 @@ import {
   Heart,
   ImagePlus,
   Lightbulb,
-  Lock,
   PenLine,
   Plus,
   RefreshCw,
