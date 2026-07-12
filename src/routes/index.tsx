@@ -1108,11 +1108,11 @@ function Index() {
                             }
                           }}
                         >
-                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
                             <Icon className="h-4 w-4" aria-hidden="true" />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-xs font-semibold text-foreground">
+                            <span className="block truncate text-[11px] font-semibold text-foreground">
                               {action.label}
                             </span>
                             <span className="block truncate text-[10px] leading-snug text-muted-foreground">
