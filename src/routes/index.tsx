@@ -1099,7 +1099,7 @@ function Index() {
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
                             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                           </span>
-                          <span className="truncate text-xs font-semibold text-foreground">
+                          <span className="text-[10px] font-semibold leading-tight text-foreground whitespace-normal">
                             {action.label}
                           </span>
                         </button>
