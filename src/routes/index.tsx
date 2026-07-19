@@ -1047,23 +1047,17 @@ function Index() {
 
               {/* Idea Generation */}
               <div className="space-y-2">
-                <p className="px-1 text-sm font-medium text-ink-soft">
-                  Idea Generation
-                </p>
-                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-1.5">
-                      <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                      <p className="text-sm font-medium text-ink-soft">Suggested idea</p>
-                      <button
-                        type="button"
-                        aria-label="Copy generated idea"
-                        onClick={() => copyToClipboard(previewDraft.caption)}
-                        className="ml-1 flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                      >
-                        <Copy className="h-3 w-3" aria-hidden="true" />
-                      </button>
-                    </div>
+                <div className="flex items-center justify-between px-1">
+                  <p className="text-sm font-medium text-ink-soft">Idea Generation</p>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      aria-label="Copy generated idea"
+                      onClick={() => copyToClipboard(previewDraft.caption)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                    >
+                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
                     <button
                       type="button"
                       aria-label="Generate new"
@@ -1073,6 +1067,8 @@ function Index() {
                       <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
+                </div>
+                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
                   <p className="text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
@@ -1081,15 +1077,15 @@ function Index() {
                       const Icon = action.icon;
                       return (
                         <button
-                          key={action.label}
-                          className="group flex items-center gap-2 rounded-[1.15rem] bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          key={action.key}
+                          className="group flex items-center gap-2 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
-                            if (action.label === "Save idea") {
+                            if (action.key === "save") {
                               const text = previewDraft.caption;
                               setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
                               setDraftSeed((s) => s + 1);
-                            } else if (action.label === "Use in Draft") {
+                            } else if (action.key === "use") {
                               const text = previewDraft.caption;
                               const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
                               const newDraft: Draft = {
@@ -1110,18 +1106,9 @@ function Index() {
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
                             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[10px] font-semibold text-foreground">
-                              {action.label}
-                            </span>
-                            <span className="block text-[9px] leading-snug text-muted-foreground">
-                              {action.detail}
-                            </span>
+                          <span className="truncate text-xs font-semibold text-foreground">
+                            {action.label}
                           </span>
-                          <ChevronRight
-                            className="h-4 w-4 shrink-0 text-primary transition group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
                         </button>
                       );
                     })}
