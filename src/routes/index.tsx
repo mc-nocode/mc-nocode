@@ -12,7 +12,6 @@ import {
   FolderOpen,
   Heart,
   ImagePlus,
-  Lightbulb,
   PenLine,
   Plus,
   RefreshCw,
@@ -39,8 +38,8 @@ export const Route = createFileRoute("/")({
 
 
 const ideaActions = [
-  { label: "Save idea", detail: "Keep this idea for later", icon: Heart },
-  { label: "Use in Draft", detail: "Add to your draft", icon: PenLine },
+  { key: "save", label: "Save idea for later.", icon: Heart },
+  { key: "use", label: "Use in draft", icon: PenLine },
 ];
 
 const initialRecentFiles = [
@@ -559,14 +558,18 @@ function Index() {
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
             <h1 className="mt-1 text-base font-semibold text-foreground">{headerTitle}</h1>
           </div>
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-            type="button"
-            aria-label="New draft"
-            onClick={createNewDraft}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-          </button>
+          {selectedDraft ? (
+            <div className="h-10 w-10" aria-hidden="true" />
+          ) : (
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+              type="button"
+              aria-label="New draft"
+              onClick={createNewDraft}
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
 
         </header>
 
@@ -605,17 +608,6 @@ function Index() {
                     title={selectedDraft.title}
                   />
                   <div className="absolute bottom-2 right-2 flex gap-2">
-                    {draftEdits.photos.length < MAX_DRAFT_PHOTOS && (
-                      <button
-                        type="button"
-                        aria-label="Add photos"
-                        onClick={() => draftPhotoInputRef.current?.click()}
-                        className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
-                      >
-                        <Plus className="h-4 w-4" aria-hidden="true" />
-                        Add
-                      </button>
-                    )}
                     <button
                       type="button"
                       aria-label="Edit photos"
@@ -641,6 +633,20 @@ function Index() {
                   }
                   placeholder="Draft title"
                   className="w-full rounded-[1rem] border border-input bg-background px-3 py-2.5 text-base font-semibold text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-ink-soft">
+                  Notes
+                </p>
+                <textarea
+                  value={draftEdits.note}
+                  onChange={(event) =>
+                    setDraftEdits((d) => (d ? { ...d, note: event.target.value } : d))
+                  }
+                  placeholder="Add notes about this draft..."
+                  className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
                 />
               </div>
 
@@ -679,20 +685,6 @@ function Index() {
                   />
                   {draftEdits.featured ? "Featured" : "Mark Featured"}
                 </button>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-ink-soft">
-                  Notes
-                </p>
-                <textarea
-                  value={draftEdits.note}
-                  onChange={(event) =>
-                    setDraftEdits((d) => (d ? { ...d, note: event.target.value } : d))
-                  }
-                  placeholder="Add notes about this draft..."
-                  className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                />
               </div>
 
               <div className="flex items-center justify-between gap-3">
@@ -1048,23 +1040,17 @@ function Index() {
 
               {/* Idea Generation */}
               <div className="space-y-2">
-                <p className="px-1 text-sm font-medium text-ink-soft">
-                  Idea Generation
-                </p>
-                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-1.5">
-                      <Lightbulb className="h-4 w-4 text-primary" aria-hidden="true" />
-                      <p className="text-sm font-medium text-ink-soft">Suggested idea</p>
-                      <button
-                        type="button"
-                        aria-label="Copy generated idea"
-                        onClick={() => copyToClipboard(previewDraft.caption)}
-                        className="ml-1 flex h-5 w-5 items-center justify-center rounded text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                      >
-                        <Copy className="h-3 w-3" aria-hidden="true" />
-                      </button>
-                    </div>
+                <div className="flex items-center justify-between px-1">
+                  <p className="text-sm font-medium text-ink-soft">Idea Generation</p>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      aria-label="Copy generated idea"
+                      onClick={() => copyToClipboard(previewDraft.caption)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                    >
+                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                    </button>
                     <button
                       type="button"
                       aria-label="Generate new"
@@ -1074,6 +1060,8 @@ function Index() {
                       <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
+                </div>
+                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
                   <p className="text-sm leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
@@ -1082,15 +1070,15 @@ function Index() {
                       const Icon = action.icon;
                       return (
                         <button
-                          key={action.label}
-                          className="group flex items-center gap-2 rounded-[1.15rem] bg-card p-2.5 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          key={action.key}
+                          className="group flex items-center gap-2 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
                           type="button"
                           onClick={() => {
-                            if (action.label === "Save idea") {
+                            if (action.key === "save") {
                               const text = previewDraft.caption;
                               setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
                               setDraftSeed((s) => s + 1);
-                            } else if (action.label === "Use in Draft") {
+                            } else if (action.key === "use") {
                               const text = previewDraft.caption;
                               const title = text.length > 40 ? text.slice(0, 40).trim() + "…" : text;
                               const newDraft: Draft = {
@@ -1111,18 +1099,9 @@ function Index() {
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
                             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                           </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[10px] font-semibold text-foreground">
-                              {action.label}
-                            </span>
-                            <span className="block text-[9px] leading-snug text-muted-foreground">
-                              {action.detail}
-                            </span>
+                          <span className="text-[10px] font-semibold leading-tight text-foreground whitespace-normal">
+                            {action.label}
                           </span>
-                          <ChevronRight
-                            className="h-4 w-4 shrink-0 text-primary transition group-hover:translate-x-0.5"
-                            aria-hidden="true"
-                          />
                         </button>
                       );
                     })}
