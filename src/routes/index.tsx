@@ -558,14 +558,18 @@ function Index() {
             <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Mori</p>
             <h1 className="mt-1 text-base font-semibold text-foreground">{headerTitle}</h1>
           </div>
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
-            type="button"
-            aria-label="New draft"
-            onClick={createNewDraft}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-          </button>
+          {selectedDraft ? (
+            <div className="h-10 w-10" aria-hidden="true" />
+          ) : (
+            <button
+              className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-soft transition duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-ring/20"
+              type="button"
+              aria-label="New draft"
+              onClick={createNewDraft}
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
 
         </header>
 
