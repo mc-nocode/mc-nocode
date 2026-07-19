@@ -12,7 +12,6 @@ import {
   FolderOpen,
   Heart,
   ImagePlus,
-  Lightbulb,
   PenLine,
   Plus,
   RefreshCw,
