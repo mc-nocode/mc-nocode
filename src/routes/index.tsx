@@ -636,6 +636,20 @@ function Index() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-ink-soft">
+                  Notes
+                </p>
+                <textarea
+                  value={draftEdits.note}
+                  onChange={(event) =>
+                    setDraftEdits((d) => (d ? { ...d, note: event.target.value } : d))
+                  }
+                  placeholder="Add notes about this draft..."
+                  className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
+                />
+              </div>
+
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -671,20 +685,6 @@ function Index() {
                   />
                   {draftEdits.featured ? "Featured" : "Mark Featured"}
                 </button>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-ink-soft">
-                  Notes
-                </p>
-                <textarea
-                  value={draftEdits.note}
-                  onChange={(event) =>
-                    setDraftEdits((d) => (d ? { ...d, note: event.target.value } : d))
-                  }
-                  placeholder="Add notes about this draft..."
-                  className="min-h-28 w-full resize-none rounded-[1rem] border border-input bg-background px-3 py-3 text-sm leading-relaxed text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ring focus:ring-4 focus:ring-ring/15"
-                />
               </div>
 
               <div className="flex items-center justify-between gap-3">
