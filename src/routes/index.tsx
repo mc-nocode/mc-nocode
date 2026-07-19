@@ -604,17 +604,6 @@ function Index() {
                     title={selectedDraft.title}
                   />
                   <div className="absolute bottom-2 right-2 flex gap-2">
-                    {draftEdits.photos.length < MAX_DRAFT_PHOTOS && (
-                      <button
-                        type="button"
-                        aria-label="Add photos"
-                        onClick={() => draftPhotoInputRef.current?.click()}
-                        className="flex h-9 items-center gap-1.5 rounded-full bg-background/95 px-3 text-xs font-semibold text-foreground shadow-soft ring-1 ring-border backdrop-blur transition hover:bg-card focus:outline-none focus:ring-4 focus:ring-ring/20"
-                      >
-                        <Plus className="h-4 w-4" aria-hidden="true" />
-                        Add
-                      </button>
-                    )}
                     <button
                       type="button"
                       aria-label="Edit photos"
