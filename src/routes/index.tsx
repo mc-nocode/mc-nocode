@@ -39,8 +39,8 @@ export const Route = createFileRoute("/")({
 
 
 const ideaActions = [
-  { label: "Save idea", detail: "Keep this idea for later", icon: Heart },
-  { label: "Use in Draft", detail: "Add to your draft", icon: PenLine },
+  { key: "save", label: "Save idea for later.", icon: Heart },
+  { key: "use", label: "Use in draft", icon: PenLine },
 ];
 
 const initialRecentFiles = [
