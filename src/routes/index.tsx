@@ -984,89 +984,32 @@ function Index() {
 
 
           {activeTab === "Ideas" && !viewingIdea && (
-            <section className="slow-rise space-y-6" aria-label="Ideas">
-              {/* For You — Trending Reels */}
-              <div className="space-y-2">
-                <p className="px-1 text-sm font-medium text-ink-soft">
-                  For you
-                </p>
-                <article
-                  className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft"
-                  aria-label="Trending reels"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <Film className="h-4 w-4 text-primary" aria-hidden="true" />
-                      <p className="text-sm font-medium text-ink-soft">Trending reels</p>
-                    </div>
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                      Updated today
-                    </span>
-                  </div>
-                  <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
-                    {[
-                      { title: "Slow morning rituals", views: "2.1M" },
-                      { title: "Quiet desk reset", views: "874K" },
-                      { title: "Linen & light", views: "1.4M" },
-                      { title: "Notes by the window", views: "512K" },
-                    ].map((reel) => (
-                      <button
-                        key={reel.title}
-                        type="button"
-                        aria-label={`Play reel: ${reel.title}, ${reel.views} views`}
-                        className="group relative shrink-0 overflow-hidden rounded-[1rem] border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
-                        style={{ width: "9rem" }}
-                      >
-                        <div className="relative aspect-[9/14] w-full overflow-hidden">
-                          <img
-                            src={moriPhoto}
-                            alt=""
-                            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-foreground/55 via-transparent to-transparent" />
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background/80 text-primary shadow-soft backdrop-blur">
-                              <Play className="h-4 w-4 fill-current" aria-hidden="true" />
-                            </span>
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 space-y-0.5 p-2 text-background">
-                            <p className="text-[11px] font-semibold leading-tight line-clamp-2">
-                              {reel.title}
-                            </p>
-                            <p className="text-[10px] opacity-80">{reel.views} views</p>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </article>
-              </div>
-
-              {/* Idea Generation */}
-              <div className="space-y-2">
+            <section className="slow-rise space-y-8" aria-label="Ideas">
+              {/* Idea Generation — top priority */}
+              <div className="space-y-3">
                 <div className="flex items-center justify-between px-1">
-                  <p className="text-sm font-medium text-ink-soft">Idea Generation</p>
+                  <p className="text-sm font-semibold text-foreground">Idea generation</p>
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
                       aria-label="Copy generated idea"
                       onClick={() => copyToClipboard(previewDraft.caption)}
-                      className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                      className="flex h-8 w-8 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/40"
                     >
-                      <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                      <Copy className="h-4 w-4" aria-hidden="true" />
                     </button>
                     <button
                       type="button"
-                      aria-label="Generate new"
+                      aria-label="Generate new idea"
                       onClick={() => setDraftSeed((s) => s + 1)}
-                      className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
+                      className="flex h-8 w-8 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/40"
                     >
-                      <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+                      <RefreshCw className="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
-                <article className="space-y-3 rounded-[1.45rem] border border-border bg-surface p-4 shadow-soft">
-                  <p className="text-sm leading-relaxed text-foreground">
+                <article className="space-y-4 rounded-[1.45rem] border border-border bg-card p-5 shadow-soft">
+                  <p className="text-[15px] leading-relaxed text-foreground">
                     {previewDraft.caption}
                   </p>
                   <div className="grid grid-cols-2 gap-3" aria-label="Idea actions">
@@ -1075,12 +1018,12 @@ function Index() {
                       return (
                         <button
                           key={action.key}
-                          className="group flex items-center gap-2 rounded-[1.15rem] bg-card p-3 text-left transition duration-500 hover:-translate-y-0.5 hover:bg-surface focus:outline-none focus:ring-4 focus:ring-ring/15"
+                          className="group flex items-center gap-2.5 rounded-[1rem] border border-border bg-background px-3 py-2.5 text-left transition duration-300 hover:border-primary/40 hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                           type="button"
                           onClick={() => {
                             if (action.key === "save") {
                               const text = previewDraft.caption;
-                              setIdeas((current) => [{ id: Date.now(), text, status: "Idea" }, ...current]);
+                              setIdeas((current) => [{ id: Date.now(), text, status: "Saved" }, ...current]);
                               setDraftSeed((s) => s + 1);
                             } else if (action.key === "use") {
                               const text = previewDraft.caption;
@@ -1101,9 +1044,9 @@ function Index() {
                           }}
                         >
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition group-hover:bg-accent">
-                            <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                            <Icon className="h-4 w-4" aria-hidden="true" />
                           </span>
-                          <span className="text-[10px] font-semibold leading-tight text-foreground whitespace-normal">
+                          <span className="text-xs font-semibold leading-tight text-foreground whitespace-normal">
                             {action.label}
                           </span>
                         </button>
@@ -1113,44 +1056,94 @@ function Index() {
                 </article>
               </div>
 
-              {/* Ideas List */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-3 px-1">
-                  <p className="text-sm font-medium text-ink-soft">
-                    Ideas list
-                  </p>
-                  <span className="text-xs font-medium text-primary">{ideas.length} saved</span>
+              {/* Saved ideas — simplified list with dividers */}
+              <div className="space-y-3">
+                <div className="flex items-baseline justify-between gap-3 px-1">
+                  <h2 className="text-sm font-semibold text-foreground">Saved ideas</h2>
+                  <span className="text-xs text-muted-foreground">{ideas.length} saved</span>
                 </div>
-                <section
-                  className="rounded-[1.45rem] border border-border bg-surface p-2 shadow-soft"
-                  aria-label="Ideas list"
-                >
-                  <ul className="divide-y divide-border overflow-hidden rounded-[1rem] bg-background">
+                {ideas.length === 0 ? (
+                  <p className="px-1 text-xs text-muted-foreground">
+                    No saved ideas yet. Generate one above and tap “Save idea for later.”
+                  </p>
+                ) : (
+                  <ul className="divide-y divide-border border-y border-border">
                     {ideas.map((idea) => (
                       <li key={idea.id}>
                         <button
-                          className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left transition hover:bg-card focus:outline-none focus:bg-card"
+                          className="flex w-full items-center gap-3 py-3.5 text-left transition hover:bg-card focus:outline-none focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring/40"
                           type="button"
                           onClick={() => setViewingIdeaId(idea.id)}
                         >
-                          <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-relaxed text-foreground">
+                          <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-snug text-foreground">
                             {idea.text}
                           </span>
-                          <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-primary">
+                          <span className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
                             {idea.status}
                           </span>
                           <ChevronRight
-                            className="h-4 w-4 shrink-0 text-primary"
+                            className="h-4 w-4 shrink-0 text-muted-foreground"
                             aria-hidden="true"
                           />
                         </button>
                       </li>
                     ))}
                   </ul>
-                </section>
+                )}
+              </div>
+
+              {/* For You — Trending Reels (inspiration, lower priority) */}
+              <div className="space-y-3">
+                <p className="px-1 text-sm font-semibold text-foreground">For you</p>
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <Film className="h-4 w-4 text-primary" aria-hidden="true" />
+                    <p className="text-xs font-medium text-ink-soft">Trending reels</p>
+                  </div>
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                    Updated today
+                  </span>
+                </div>
+                <div className="-mx-5 flex gap-3 overflow-x-auto px-5 pb-1">
+                  {[
+                    { title: "Slow morning rituals", views: "2.1M" },
+                    { title: "Quiet desk reset", views: "874K" },
+                    { title: "Linen & light", views: "1.4M" },
+                    { title: "Notes by the window", views: "512K" },
+                  ].map((reel) => (
+                    <button
+                      key={reel.title}
+                      type="button"
+                      aria-label={`Play reel: ${reel.title}, ${reel.views} views`}
+                      className="group relative shrink-0 overflow-hidden rounded-[1rem] border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                      style={{ width: "9rem" }}
+                    >
+                      <div className="relative aspect-[9/14] w-full overflow-hidden">
+                        <img
+                          src={moriPhoto}
+                          alt=""
+                          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background/85 text-primary shadow-soft backdrop-blur">
+                            <Play className="h-4 w-4 fill-current" aria-hidden="true" />
+                          </span>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 space-y-0.5 p-2 text-background">
+                          <p className="text-[11px] font-semibold leading-tight line-clamp-2">
+                            {reel.title}
+                          </p>
+                          <p className="text-[10px] opacity-85">{reel.views} views</p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </section>
           )}
+
 
 
 
