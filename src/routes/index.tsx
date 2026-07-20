@@ -1166,8 +1166,8 @@ function Index() {
                     Idea detail
                   </p>
                   <div className="flex items-center gap-1.5">
-                    <div className="flex gap-1.5">
-                      {["Planned", "Up Next"].map((status) => (
+                    <div className="flex flex-wrap gap-1.5">
+                      {IDEA_STATUSES.map((status) => (
                         <button
                           key={status}
                           className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
