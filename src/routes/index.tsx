@@ -1010,7 +1010,8 @@ function Index() {
                       <button
                         key={reel.title}
                         type="button"
-                        className="group relative shrink-0 overflow-hidden rounded-[1rem] border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-soft focus:outline-none focus:ring-2 focus:ring-ring/30"
+                        aria-label={`Play reel: ${reel.title}, ${reel.views} views`}
+                        className="group relative shrink-0 overflow-hidden rounded-[1rem] border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
                         style={{ width: "9rem" }}
                       >
                         <div className="relative aspect-[9/14] w-full overflow-hidden">
