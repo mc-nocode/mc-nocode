@@ -402,7 +402,7 @@ function Index() {
     setIdeas((current) => current.map((i) => (i.id === id ? { ...i, text } : i)));
   };
 
-  const updateIdeaStatus = (id: number, status: ContentIdea["status"]) => {
+  const updateIdeaStatus = (id: number, status: IdeaStatus) => {
     setIdeas((current) => current.map((i) => (i.id === id ? { ...i, status } : i)));
   };
 
