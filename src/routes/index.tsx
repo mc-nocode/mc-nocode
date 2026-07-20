@@ -387,7 +387,7 @@ function Index() {
   const addIdea = () => {
     const text = newIdea.trim();
     if (!text) return;
-    const idea = { id: Date.now(), text, status: "Idea" };
+    const idea: ContentIdea = { id: Date.now(), text, status: "Saved" };
     setIdeas((current) => [idea, ...current]);
     setNewIdea("");
   };
