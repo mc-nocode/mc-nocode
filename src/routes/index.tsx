@@ -70,13 +70,10 @@ const initialDrafts: Draft[] = [
   { title: "Before archive", time: "2 days ago", photos: [moriPhoto], note: "", favorite: true, featured: false },
 ];
 
-const IDEA_STATUSES = ["Saved", "Planned", "In progress", "Published"] as const;
-type IdeaStatus = (typeof IDEA_STATUSES)[number];
-
-const initialContentIdeas: { id: number; text: string; status: IdeaStatus }[] = [
-  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel.", status: "Saved" },
-  { id: 2, text: "Write a carousel about building a slower creative routine.", status: "Planned" },
-  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "In progress" },
+const initialContentIdeas: { id: number; text: string }[] = [
+  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel." },
+  { id: 2, text: "Write a carousel about building a slower creative routine." },
+  { id: 3, text: "Post a short caption on why simple setups still feel personal." },
 ];
 
 type ContentIdea = (typeof initialContentIdeas)[number];
