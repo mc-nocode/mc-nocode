@@ -384,7 +384,7 @@ function Index() {
   const addIdea = () => {
     const text = newIdea.trim();
     if (!text) return;
-    const idea: ContentIdea = { id: Date.now(), text, status: "Saved" };
+    const idea: ContentIdea = { id: Date.now(), text };
     setIdeas((current) => [idea, ...current]);
     setNewIdea("");
   };
@@ -397,10 +397,6 @@ function Index() {
 
   const updateIdeaText = (id: number, text: string) => {
     setIdeas((current) => current.map((i) => (i.id === id ? { ...i, text } : i)));
-  };
-
-  const updateIdeaStatus = (id: number, status: IdeaStatus) => {
-    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, status } : i)));
   };
 
   const attachPhotoToIdea = (ideaId: number, url: string) => {
