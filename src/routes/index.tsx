@@ -70,13 +70,10 @@ const initialDrafts: Draft[] = [
   { title: "Before archive", time: "2 days ago", photos: [moriPhoto], note: "", favorite: true, featured: false },
 ];
 
-const IDEA_STATUSES = ["Saved", "Planned", "In progress", "Published"] as const;
-type IdeaStatus = (typeof IDEA_STATUSES)[number];
-
-const initialContentIdeas: { id: number; text: string; status: IdeaStatus }[] = [
-  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel.", status: "Saved" },
-  { id: 2, text: "Write a carousel about building a slower creative routine.", status: "Planned" },
-  { id: 3, text: "Post a short caption on why simple setups still feel personal.", status: "In progress" },
+const initialContentIdeas: { id: number; text: string }[] = [
+  { id: 1, text: "Turn this photo into a 20-second behind-the-scenes reel." },
+  { id: 2, text: "Write a carousel about building a slower creative routine." },
+  { id: 3, text: "Post a short caption on why simple setups still feel personal." },
 ];
 
 type ContentIdea = (typeof initialContentIdeas)[number];
@@ -387,7 +384,7 @@ function Index() {
   const addIdea = () => {
     const text = newIdea.trim();
     if (!text) return;
-    const idea: ContentIdea = { id: Date.now(), text, status: "Saved" };
+    const idea: ContentIdea = { id: Date.now(), text };
     setIdeas((current) => [idea, ...current]);
     setNewIdea("");
   };
@@ -400,10 +397,6 @@ function Index() {
 
   const updateIdeaText = (id: number, text: string) => {
     setIdeas((current) => current.map((i) => (i.id === id ? { ...i, text } : i)));
-  };
-
-  const updateIdeaStatus = (id: number, status: IdeaStatus) => {
-    setIdeas((current) => current.map((i) => (i.id === id ? { ...i, status } : i)));
   };
 
   const attachPhotoToIdea = (ideaId: number, url: string) => {
@@ -737,21 +730,18 @@ function Index() {
                 className="slow-rise space-y-4 [animation-delay:80ms]"
                 aria-label="Featured draft"
               >
-                <div className="flex items-center justify-between px-1">
+                <div className="px-1">
                   <p className="text-sm font-medium text-ink-soft">Featured draft</p>
-                  <button
-                    type="button"
-                    aria-label="Edit featured draft"
-                    onClick={() => {
-                      const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                      if (featured) setSelectedDraftTitle(featured.title);
-                    }}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                  >
-                    <PenLine className="h-4 w-4" aria-hidden="true" />
-                  </button>
                 </div>
-                <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
+                <button
+                  type="button"
+                  aria-label="Open featured draft"
+                  onClick={() => {
+                    const featured = drafts.find((d) => d.featured) ?? drafts[0];
+                    if (featured) setSelectedDraftTitle(featured.title);
+                  }}
+                  className="group block w-full rounded-[1.6rem] border border-border bg-card p-3 text-left shadow-soft transition duration-300 hover:-translate-y-0.5 hover:shadow-photo focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                >
                   <div className="overflow-hidden rounded-[1.15rem] bg-linen">
                     <img
                       src={moriPhoto}
@@ -771,19 +761,10 @@ function Index() {
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       A calm visual starting point for a thoughtful post, reel, or carousel. Natural light, soft textures, and a quiet moment that invites people to pause and look closer.
                     </p>
-                    <button
-                      className="mt-2 text-xs font-medium text-primary"
-                      type="button"
-                      onClick={() => {
-                        const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                        if (featured) setSelectedDraftTitle(featured.title);
-                      }}
-                    >
-                      See more
-                    </button>
                   </div>
-                </article>
+                </button>
               </section>
+
 
               <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Favorites">
                 <div className="flex items-center justify-between px-1">
@@ -1023,7 +1004,7 @@ function Index() {
                           onClick={() => {
                             if (action.key === "save") {
                               const text = previewDraft.caption;
-                              setIdeas((current) => [{ id: Date.now(), text, status: "Saved" }, ...current]);
+                              setIdeas((current) => [{ id: Date.now(), text }, ...current]);
                               setDraftSeed((s) => s + 1);
                             } else if (action.key === "use") {
                               const text = previewDraft.caption;
@@ -1063,32 +1044,33 @@ function Index() {
                   <span className="text-xs text-muted-foreground">{ideas.length} saved</span>
                 </div>
                 {ideas.length === 0 ? (
-                  <p className="px-1 text-xs text-muted-foreground">
-                    No saved ideas yet. Generate one above and tap “Save idea for later.”
-                  </p>
+                  <div className="rounded-[1.25rem] border border-dashed border-border bg-background/60 px-4 py-6 text-center">
+                    <p className="text-xs text-muted-foreground">
+                      No saved ideas yet. Generate one above and tap “Save idea for later.”
+                    </p>
+                  </div>
                 ) : (
-                  <ul className="divide-y divide-border border-y border-border">
-                    {ideas.map((idea) => (
-                      <li key={idea.id}>
-                        <button
-                          className="flex w-full items-center gap-3 py-3.5 text-left transition hover:bg-card focus:outline-none focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring/40"
-                          type="button"
-                          onClick={() => setViewingIdeaId(idea.id)}
-                        >
-                          <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-snug text-foreground">
-                            {idea.text}
-                          </span>
-                          <span className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
-                            {idea.status}
-                          </span>
-                          <ChevronRight
-                            className="h-4 w-4 shrink-0 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card shadow-soft">
+                    <ul className="divide-y divide-border">
+                      {ideas.map((idea) => (
+                        <li key={idea.id}>
+                          <button
+                            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-secondary/60 focus:outline-none focus-visible:bg-secondary/70 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/40"
+                            type="button"
+                            onClick={() => setViewingIdeaId(idea.id)}
+                          >
+                            <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-snug text-foreground">
+                              {idea.text}
+                            </span>
+                            <ChevronRight
+                              className="h-4 w-4 shrink-0 text-muted-foreground"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
 
@@ -1165,41 +1147,23 @@ function Index() {
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                     Idea detail
                   </p>
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex flex-wrap gap-1.5">
-                      {IDEA_STATUSES.map((status) => (
-                        <button
-                          key={status}
-                          className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                            viewingIdea.status === status
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-secondary text-secondary-foreground hover:bg-accent"
-                          }`}
-                          type="button"
-                          onClick={() => updateIdeaStatus(viewingIdea.id, status)}
-                        >
-                          {status}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      aria-label="Delete idea"
-                      onClick={() => {
-                        const id = viewingIdea.id;
-                        setViewingIdeaId(null);
-                        setIdeas((current) => current.filter((i) => i.id !== id));
-                        setIdeaPhotos((current) => {
-                          const next = { ...current };
-                          delete next[id];
-                          return next;
-                        });
-                      }}
-                      className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-ring/30"
-                    >
-                      <Trash2 className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    aria-label="Delete idea"
+                    onClick={() => {
+                      const id = viewingIdea.id;
+                      setViewingIdeaId(null);
+                      setIdeas((current) => current.filter((i) => i.id !== id));
+                      setIdeaPhotos((current) => {
+                        const next = { ...current };
+                        delete next[id];
+                        return next;
+                      });
+                    }}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  </button>
                 </div>
                 <textarea
                   value={viewingIdea.text}
