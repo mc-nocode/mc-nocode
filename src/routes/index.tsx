@@ -1056,32 +1056,33 @@ function Index() {
                   <span className="text-xs text-muted-foreground">{ideas.length} saved</span>
                 </div>
                 {ideas.length === 0 ? (
-                  <p className="px-1 text-xs text-muted-foreground">
-                    No saved ideas yet. Generate one above and tap “Save idea for later.”
-                  </p>
+                  <div className="rounded-[1.25rem] border border-dashed border-border bg-background/60 px-4 py-6 text-center">
+                    <p className="text-xs text-muted-foreground">
+                      No saved ideas yet. Generate one above and tap “Save idea for later.”
+                    </p>
+                  </div>
                 ) : (
-                  <ul className="divide-y divide-border border-y border-border">
-                    {ideas.map((idea) => (
-                      <li key={idea.id}>
-                        <button
-                          className="flex w-full items-center gap-3 py-3.5 text-left transition hover:bg-card focus:outline-none focus-visible:bg-card focus-visible:ring-2 focus-visible:ring-ring/40"
-                          type="button"
-                          onClick={() => setViewingIdeaId(idea.id)}
-                        >
-                          <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-snug text-foreground">
-                            {idea.text}
-                          </span>
-                          <span className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
-                            {idea.status}
-                          </span>
-                          <ChevronRight
-                            className="h-4 w-4 shrink-0 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="overflow-hidden rounded-[1.25rem] border border-border bg-card shadow-soft">
+                    <ul className="divide-y divide-border">
+                      {ideas.map((idea) => (
+                        <li key={idea.id}>
+                          <button
+                            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-secondary/60 focus:outline-none focus-visible:bg-secondary/70 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/40"
+                            type="button"
+                            onClick={() => setViewingIdeaId(idea.id)}
+                          >
+                            <span className="min-w-0 flex-1 line-clamp-2 text-sm leading-snug text-foreground">
+                              {idea.text}
+                            </span>
+                            <ChevronRight
+                              className="h-4 w-4 shrink-0 text-muted-foreground"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
 
