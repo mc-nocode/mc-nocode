@@ -730,21 +730,18 @@ function Index() {
                 className="slow-rise space-y-4 [animation-delay:80ms]"
                 aria-label="Featured draft"
               >
-                <div className="flex items-center justify-between px-1">
+                <div className="px-1">
                   <p className="text-sm font-medium text-ink-soft">Featured draft</p>
-                  <button
-                    type="button"
-                    aria-label="Edit featured draft"
-                    onClick={() => {
-                      const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                      if (featured) setSelectedDraftTitle(featured.title);
-                    }}
-                    className="flex h-7 w-7 items-center justify-center rounded-full text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-ring/30"
-                  >
-                    <PenLine className="h-4 w-4" aria-hidden="true" />
-                  </button>
                 </div>
-                <article className="rounded-[1.6rem] border border-border bg-card p-3 shadow-soft">
+                <button
+                  type="button"
+                  aria-label="Open featured draft"
+                  onClick={() => {
+                    const featured = drafts.find((d) => d.featured) ?? drafts[0];
+                    if (featured) setSelectedDraftTitle(featured.title);
+                  }}
+                  className="group block w-full rounded-[1.6rem] border border-border bg-card p-3 text-left shadow-soft transition duration-300 hover:-translate-y-0.5 hover:shadow-photo focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+                >
                   <div className="overflow-hidden rounded-[1.15rem] bg-linen">
                     <img
                       src={moriPhoto}
@@ -764,19 +761,10 @@ function Index() {
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                       A calm visual starting point for a thoughtful post, reel, or carousel. Natural light, soft textures, and a quiet moment that invites people to pause and look closer.
                     </p>
-                    <button
-                      className="mt-2 text-xs font-medium text-primary"
-                      type="button"
-                      onClick={() => {
-                        const featured = drafts.find((d) => d.featured) ?? drafts[0];
-                        if (featured) setSelectedDraftTitle(featured.title);
-                      }}
-                    >
-                      See more
-                    </button>
                   </div>
-                </article>
+                </button>
               </section>
+
 
               <section className="slow-rise space-y-3 [animation-delay:150ms]" aria-label="Favorites">
                 <div className="flex items-center justify-between px-1">
