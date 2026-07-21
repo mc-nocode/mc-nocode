@@ -1016,7 +1016,7 @@ function Index() {
                           onClick={() => {
                             if (action.key === "save") {
                               const text = previewDraft.caption;
-                              setIdeas((current) => [{ id: Date.now(), text, status: "Saved" }, ...current]);
+                              setIdeas((current) => [{ id: Date.now(), text }, ...current]);
                               setDraftSeed((s) => s + 1);
                             } else if (action.key === "use") {
                               const text = previewDraft.caption;
