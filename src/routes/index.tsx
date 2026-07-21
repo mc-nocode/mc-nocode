@@ -1159,41 +1159,23 @@ function Index() {
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                     Idea detail
                   </p>
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex flex-wrap gap-1.5">
-                      {IDEA_STATUSES.map((status) => (
-                        <button
-                          key={status}
-                          className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                            viewingIdea.status === status
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-secondary text-secondary-foreground hover:bg-accent"
-                          }`}
-                          type="button"
-                          onClick={() => updateIdeaStatus(viewingIdea.id, status)}
-                        >
-                          {status}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      aria-label="Delete idea"
-                      onClick={() => {
-                        const id = viewingIdea.id;
-                        setViewingIdeaId(null);
-                        setIdeas((current) => current.filter((i) => i.id !== id));
-                        setIdeaPhotos((current) => {
-                          const next = { ...current };
-                          delete next[id];
-                          return next;
-                        });
-                      }}
-                      className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-ring/30"
-                    >
-                      <Trash2 className="h-4 w-4" aria-hidden="true" />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    aria-label="Delete idea"
+                    onClick={() => {
+                      const id = viewingIdea.id;
+                      setViewingIdeaId(null);
+                      setIdeas((current) => current.filter((i) => i.id !== id));
+                      setIdeaPhotos((current) => {
+                        const next = { ...current };
+                        delete next[id];
+                        return next;
+                      });
+                    }}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  </button>
                 </div>
                 <textarea
                   value={viewingIdea.text}
